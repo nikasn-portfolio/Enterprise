@@ -1,12 +1,14 @@
 package com.knits.enterprise.model.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 

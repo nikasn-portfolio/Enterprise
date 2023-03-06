@@ -70,5 +70,7 @@ public interface ActiveEntityRepository <T extends AbstractActiveEntity> extends
     default List<T> findAll(){
         throw new UnsupportedOperationException("Provide 2 different implementations for active and all. Include in query all minimal fetches on entities");
     }
+    @Query("select t from #{#entityName} t where t.active = true")
+    List<T> findAllActive();
 
 }

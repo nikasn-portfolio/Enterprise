@@ -9,9 +9,7 @@ import java.util.Set;
 
 public interface EmployeeRepository extends ActiveEntityRepository<Employee> {
 
-
-    @Query("select e from Employee e where e.id IN (:ids) AND e.active = true")
+    @Query("select e from Employee  e  where e.id IN (:ids) AND e.active = true")
     Set<Employee> findAllById(@Param("ids") Set<Long> ids);
-
 
 }

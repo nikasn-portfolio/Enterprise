@@ -1,26 +1,17 @@
 package com.knits.enterprise.model.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
-
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder(toBuilder=true)
 @Table(name = "address")
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+public class Address extends AbstractActiveEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id", nullable = false)

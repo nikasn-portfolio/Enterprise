@@ -1,7 +1,11 @@
 package com.knits.enterprise.model.company;
 
+import com.knits.enterprise.model.common.BinaryData;
 import com.knits.enterprise.model.security.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +28,9 @@ public class Contract implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @OneToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "binary_id")
+    private BinaryData binaryData;
 
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn (name = "creator_id")

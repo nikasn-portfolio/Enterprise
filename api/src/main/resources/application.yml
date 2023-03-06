@@ -12,7 +12,7 @@ spring:
   jpa:
     database: postgresql
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       show-sql: true
     properties:
       hibernate:
@@ -23,8 +23,8 @@ spring:
       date-time: iso
 
   liquibase:
-    enabled: false
-    change-log: "classpath:/liquibase/changelog-master.xml"
+    enabled: true
+    change-log: "classpath:/liquibase/changelog-master.yaml"
 
   servlet:
     multipart:
@@ -38,7 +38,7 @@ debug: false
 
 logging:
   level:
-    # liquibase: INFO
+    liquibase: INFO
     org:
       springframework: INFO
     com:

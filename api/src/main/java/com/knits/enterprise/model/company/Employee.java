@@ -4,7 +4,6 @@ import com.knits.enterprise.model.common.AbstractActiveEntity;
 import com.knits.enterprise.model.common.Organization;
 import com.knits.enterprise.model.enums.Gender;
 import com.knits.enterprise.model.location.Location;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,10 +13,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
-
-import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Data
@@ -36,6 +32,7 @@ public class Employee extends AbstractActiveEntity implements Serializable {
     private String lastName;
 
     @Column(name = "email", length = 254, unique = true, nullable = false)
+    @EqualsAndHashCode.Include
     private String email;
 
     @Column(name = "birth_date", nullable = false)
@@ -69,7 +66,6 @@ public class Employee extends AbstractActiveEntity implements Serializable {
     @JoinColumn(name = "office_id", referencedColumnName = "id")
     private Location office;
 
-
     @ManyToOne
     @JoinColumn(name = "job_title_id", referencedColumnName = "id")
     private JobTitle jobTitle;
@@ -78,10 +74,15 @@ public class Employee extends AbstractActiveEntity implements Serializable {
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
 
-
     @ManyToOne
     @JoinColumn(name = "division_id", referencedColumnName = "id")
     private Division division;
+    @ManyToOne
+    @JoinColumn(name = "cost_center_id", referencedColumnName = "id")
+    private CostCenter costCenter;
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solid_line_manager_id", referencedColumnName = "id")

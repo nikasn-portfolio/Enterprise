@@ -15,6 +15,6 @@ import javax.persistence.MappedSuperclass;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class AbstractActiveEntity extends AbstractEntity{
 
-    @Column(name = "active", columnDefinition = "boolean default false")
+    @Column(name = "active", columnDefinition = "boolean default true")
     private boolean active;
 }

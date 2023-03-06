@@ -1,26 +1,18 @@
 package com.knits.enterprise.model.common;
 
+import com.knits.enterprise.model.company.AbstractOrganizationStructure;
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Data
+@NoArgsConstructor
+@SuperBuilder(toBuilder=true)
 @Table(name = "organization")
-public class Organization implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @Column(unique = true,nullable = false)
-    private String name;
+public class Organization extends AbstractOrganizationStructure {
 
     @Column
     private String alias;
@@ -37,7 +29,7 @@ public class Organization implements Serializable {
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "address_id")
-    private Address legalAddressCountry;
+    private Address legalAddress;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "contact_id")
