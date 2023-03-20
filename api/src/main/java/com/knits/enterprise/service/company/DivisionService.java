@@ -25,7 +25,8 @@ public class DivisionService {
 
    @Transactional
    public DivisionDto saveNewDivision(DivisionDto divisionDto) {
-       Division savedDivision = divisionMapper.toEntity(divisionDto);
+       Division division = divisionMapper.toEntity(divisionDto);
+       Division savedDivision = divisionRepository.save(division);
        return divisionMapper.toDto(savedDivision);
    }
 
@@ -33,6 +34,7 @@ public class DivisionService {
    @Transactional
    public DivisionDto partialUpdate(DivisionDto divisionDto) {
        Division division = divisionRepository.findById(divisionDto.getId()).orElseThrow(() -> new DivisionException("Division#" + divisionDto.getId() + " not found"));
+       divisionRepository.save(division);
        divisionMapper.partialUpdate(division, divisionDto);
        return divisionMapper.toDto(division);
    }
