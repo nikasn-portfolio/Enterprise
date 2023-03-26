@@ -3,6 +3,7 @@ package com.knits.enterprise.service.company;
 
 import com.knits.enterprise.dto.company.DivisionDto;
 import com.knits.enterprise.exceptions.DivisionException;
+import com.knits.enterprise.exceptions.UserException;
 import com.knits.enterprise.mapper.company.DivisionMapper;
 import com.knits.enterprise.model.company.Division;
 import com.knits.enterprise.repository.company.DivisionRepository;
@@ -33,7 +34,8 @@ public class DivisionService {
 
    @Transactional
    public DivisionDto partialUpdate(DivisionDto divisionDto) {
-       Division division = divisionRepository.findById(divisionDto.getId()).orElseThrow(() -> new DivisionException("Division#" + divisionDto.getId() + " not found"));
+       Division division = divisionRepository.findById(divisionDto.getId()).orElseThrow(() ->
+               new UserException("Division#" + divisionDto.getId() + " not found, enter valid id"));
        divisionRepository.save(division);
        divisionMapper.partialUpdate(division, divisionDto);
        return divisionMapper.toDto(division);
