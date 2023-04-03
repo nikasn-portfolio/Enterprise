@@ -1,13 +1,22 @@
 package com.knits.enterprise.controller.company;
 
 
+import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.DivisionDto;
+import com.knits.enterprise.dto.search.GenericSearchDto;
+import com.knits.enterprise.model.company.Division;
+import com.knits.enterprise.model.company.Employee;
+import com.knits.enterprise.repository.common.ActiveEntityRepository;
 import com.knits.enterprise.service.company.DivisionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -15,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @Slf4j
 public class DivisionController {
+    private final ActiveEntityRepository divisionRepository;
 
 
    @Autowired
@@ -59,4 +69,26 @@ public class DivisionController {
                .ok()
                .body(divisionFound);
    }
+
+    @GetMapping(value="/divisions", produces = {"application/json"})
+    public ResponseEntity<PaginatedResponseDto<DivisionDto>> getAllDivisions(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortingFields,
+            @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection
+    ) {
+
+       GenericSearchDto<Division> searchDto = new GenericSearchDto<>();
+       searchDto.setPage(page);
+       searchDto.setLimit(size);
+       searchDto.setSort(sortingFields);
+       searchDto.setDir(sortDirection);
+
+       PaginatedResponseDto<DivisionDto> divisions = divisionService.findAllDivision(searchDto);
+
+        return ResponseEntity
+               .ok()
+               .body(divisions);
+    }
+
 }
