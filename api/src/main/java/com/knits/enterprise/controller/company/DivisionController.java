@@ -1,22 +1,17 @@
 package com.knits.enterprise.controller.company;
 
-
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.DivisionDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.model.company.Division;
-import com.knits.enterprise.model.company.Employee;
-import com.knits.enterprise.repository.common.ActiveEntityRepository;
 import com.knits.enterprise.service.company.DivisionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import javax.validation.Valid;
 
 
 @RestController
@@ -24,15 +19,13 @@ import java.util.List;
 @RequestMapping("/api")
 @Slf4j
 public class DivisionController {
-    private final ActiveEntityRepository divisionRepository;
-
 
    @Autowired
    private DivisionService divisionService;
 
 
    @PostMapping(value = "/divisions", produces = {"application/json"}, consumes = {"application/json"})
-   public ResponseEntity<DivisionDto> createNewDivision(@RequestBody DivisionDto divisionDto) {
+   public ResponseEntity<DivisionDto> createNewDivision(@RequestBody @Valid DivisionDto divisionDto) {
        log.debug("REST request to create Division");
        return ResponseEntity
                .ok()
@@ -53,7 +46,7 @@ public class DivisionController {
 
 
    @PatchMapping(value = "/divisions", produces = {"application/json"}, consumes = {"application/json"})
-   public ResponseEntity<DivisionDto> updateDivision(@PathVariable (value = "id") @RequestBody DivisionDto divisionDto) {
+   public ResponseEntity<DivisionDto> updateDivision(@PathVariable (value = "id") @RequestBody @Valid DivisionDto divisionDto) {
        DivisionDto divisionFound = divisionService.partialUpdate(divisionDto);
        return ResponseEntity
                .ok()
