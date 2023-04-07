@@ -5,6 +5,11 @@ import com.knits.enterprise.dto.company.DivisionDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.model.company.Division;
 import com.knits.enterprise.service.company.DivisionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Divisions", description = "Division crud operations")
 @RequestMapping("/api")
 @Slf4j
 public class DivisionController {
@@ -23,9 +29,16 @@ public class DivisionController {
    @Autowired
    private DivisionService divisionService;
 
-
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "200", description = "Division created successfully."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Division not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
    @PostMapping(value = "/divisions", produces = {"application/json"}, consumes = {"application/json"})
-   public ResponseEntity<DivisionDto> createNewDivision(@RequestBody @Valid DivisionDto divisionDto) {
+   @Operation(summary = "Create a new Division", description = "Send json containing necessary fields")
+   public ResponseEntity<DivisionDto> createNewDivision(
+           @Parameter(description = "Division object") @RequestBody @Valid DivisionDto divisionDto) {
        log.debug("REST request to create Division");
        return ResponseEntity
                .ok()
@@ -33,8 +46,16 @@ public class DivisionController {
    }
 
 
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "200", description = "Retrieve division successfully."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Division not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
+   @Operation(summary = "Get Division by id", description = "Input id")
    @GetMapping(value = {"/divisions/{id}"}, produces = "application/json")
-   public ResponseEntity<DivisionDto> getDivisionById(@PathVariable (value="id") final Long id) {
+   public ResponseEntity<DivisionDto> getDivisionById(
+           @Parameter(description = "id", example = "1") @PathVariable (value="id") final Long id) {
        log.debug("REST request to get Division : {}", id);
        DivisionDto divisionFound = divisionService.findDivisionById(id);
        return ResponseEntity
@@ -45,8 +66,17 @@ public class DivisionController {
    }
 
 
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "200", description = "Update operation is successfully."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Division not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
    @PatchMapping(value = "/divisions", produces = {"application/json"}, consumes = {"application/json"})
-   public ResponseEntity<DivisionDto> updateDivision(@PathVariable (value = "id") @RequestBody @Valid DivisionDto divisionDto) {
+   @Operation(summary = "Update Division", description = "Input id to update particular division")
+   public ResponseEntity<DivisionDto> updateDivision(
+           @Parameter(description = "id", example = "1")@PathVariable (value = "id") Long id,
+           @Parameter(description = "Division object")@RequestBody @Valid DivisionDto divisionDto) {
        DivisionDto divisionFound = divisionService.partialUpdate(divisionDto);
        return ResponseEntity
                .ok()
@@ -54,8 +84,16 @@ public class DivisionController {
    }
 
 
-   @DeleteMapping(value = "/divisions", produces = {"application/json"}) // @PutMapping?
-   public ResponseEntity<DivisionDto> deleteDivision(@PathVariable (value="id") final Long id) {
+    @ApiResponses (value = {
+            @ApiResponse(responseCode = "200", description = "Delete operation is successful."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Division not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
+   @Operation(summary = "Delete Division", description = "Input id to delete particular division")
+   @DeleteMapping(value = "/divisions", produces = {"application/json"})
+   public ResponseEntity<DivisionDto> deleteDivision(
+           @Parameter(description = "id", example = "1") @PathVariable (value="id") final Long id) {
        log.debug("REST request to delete Division : {}", id);
        DivisionDto divisionFound = divisionService.deleteDivision(id);
        return ResponseEntity
@@ -63,25 +101,32 @@ public class DivisionController {
                .body(divisionFound);
    }
 
+    @ApiResponses (value = {
+        @ApiResponse(responseCode = "200", description = "Retrieve the paginated divisions successfully."),
+        @ApiResponse(responseCode = "400", description = "Bad request."),
+        @ApiResponse(responseCode = "404", description = "Division not found."),
+        @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
+    @Operation(summary = "Get paginated divisions", description = "Paginated list of divisions")
     @GetMapping(value="/divisions", produces = {"application/json"})
     public ResponseEntity<PaginatedResponseDto<DivisionDto>> getAllDivisions(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "id") String sortingFields,
-            @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection
+            @Parameter(description = "Page number", example = "1") @RequestParam(defaultValue = "0") Integer page,
+            @Parameter(description = "Size of the page") @RequestParam(defaultValue = "10") Integer size,
+            @Parameter(description = "Sorting reference") @RequestParam(defaultValue = "id") String sortingFields,
+            @Parameter(description = "Sorting direction", example = "ASC or DESC") @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection
     ) {
 
-       GenericSearchDto<Division> searchDto = new GenericSearchDto<>();
-       searchDto.setPage(page);
-       searchDto.setLimit(size);
-       searchDto.setSort(sortingFields);
-       searchDto.setDir(sortDirection);
+        GenericSearchDto<Division> searchDto = new GenericSearchDto<>();
+        searchDto.setPage(page);
+        searchDto.setLimit(size);
+        searchDto.setSort(sortingFields);
+        searchDto.setDir(sortDirection);
 
-       PaginatedResponseDto<DivisionDto> divisions = divisionService.findAllDivision(searchDto);
+        PaginatedResponseDto<DivisionDto> divisions = divisionService.findAllDivision(searchDto);
 
         return ResponseEntity
-               .ok()
-               .body(divisions);
+                .ok()
+                .body(divisions);
     }
 
 }
