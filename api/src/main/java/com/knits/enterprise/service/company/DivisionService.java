@@ -3,20 +3,14 @@ package com.knits.enterprise.service.company;
 
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.DivisionDto;
-import com.knits.enterprise.dto.company.EmployeeDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
-import com.knits.enterprise.exceptions.DivisionException;
+import com.knits.enterprise.dto.search.DivisionSearchDto;
 import com.knits.enterprise.exceptions.UserException;
 import com.knits.enterprise.mapper.company.DivisionMapper;
 import com.knits.enterprise.model.company.Division;
-import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.repository.company.DivisionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +63,7 @@ public class DivisionService {
 
 
     @Transactional
-    public PaginatedResponseDto<DivisionDto> findAllDivision(GenericSearchDto<Division> searchDto) {
+    public PaginatedResponseDto<DivisionDto> findAllDivision(DivisionSearchDto<Division> searchDto) {
 
         Page<Division> divisionsPage = divisionRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
         List<DivisionDto> divisionDtos = divisionMapper.toDtos(divisionsPage.getContent());

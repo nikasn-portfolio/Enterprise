@@ -2,7 +2,7 @@ package com.knits.enterprise.controller.company;
 
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.DivisionDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
+import com.knits.enterprise.dto.search.DivisionSearchDto;
 import com.knits.enterprise.model.company.Division;
 import com.knits.enterprise.service.company.DivisionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -110,20 +109,10 @@ public class DivisionController {
     @Operation(summary = "Get paginated divisions", description = "Paginated list of divisions")
     @GetMapping(value="/divisions", produces = {"application/json"})
     public ResponseEntity<PaginatedResponseDto<DivisionDto>> getAllDivisions(
-            @Parameter(description = "Page number", example = "1") @RequestParam(defaultValue = "0") Integer page,
-            @Parameter(description = "Size of the page") @RequestParam(defaultValue = "10") Integer size,
-            @Parameter(description = "Sorting reference") @RequestParam(defaultValue = "id") String sortingFields,
-            @Parameter(description = "Sorting direction", example = "ASC or DESC") @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection
-    ) {
-
-        GenericSearchDto<Division> searchDto = new GenericSearchDto<>();
-        searchDto.setPage(page);
-        searchDto.setLimit(size);
-        searchDto.setSort(sortingFields);
-        searchDto.setDir(sortDirection);
+            DivisionSearchDto<Division> searchDto
+            ) {
 
         PaginatedResponseDto<DivisionDto> divisions = divisionService.findAllDivision(searchDto);
-
         return ResponseEntity
                 .ok()
                 .body(divisions);
