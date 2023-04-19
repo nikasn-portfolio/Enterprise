@@ -1,6 +1,7 @@
 package com.knits.enterprise.model.company;
 
 import com.knits.enterprise.model.common.AbstractActiveEntity;
+import com.knits.enterprise.model.common.EmploymentContract;
 import com.knits.enterprise.model.common.Organization;
 import com.knits.enterprise.model.enums.Gender;
 import com.knits.enterprise.model.location.Location;
