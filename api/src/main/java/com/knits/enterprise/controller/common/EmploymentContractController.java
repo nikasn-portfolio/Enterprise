@@ -1,17 +1,26 @@
 package com.knits.enterprise.controller.common;
 
 import com.knits.enterprise.dto.common.EmploymentContractDto;
+import com.knits.enterprise.dto.search.EmploymentContractSearchDto;
 import com.knits.enterprise.http.ResponseMessage;
+import com.knits.enterprise.mapper.common.EmploymentContractMapper;
+import com.knits.enterprise.model.common.EmploymentContract;
 import com.knits.enterprise.service.common.EmploymentContractService;
 import com.knits.enterprise.validation.FileValidation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 @AllArgsConstructor
@@ -22,6 +31,7 @@ public class EmploymentContractController {
     private EmploymentContractService employmentContractService;
     private FileValidation fileValidation;
 
+    // ALLOWED FILE TYPES; PDF, DOCX AND ZIP
     @PostMapping(value = "/employment-contracts")
     public ResponseEntity<ResponseMessage> createNewEmploymentContract(
             @RequestBody MultipartFile employmentContract) {
@@ -43,13 +53,47 @@ public class EmploymentContractController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
-    @GetMapping(value = {"/employment-contracts/{id}"}, produces = "application/json")
-    public ResponseEntity<byte[]> getEmploymentContractById(@PathVariable (value="id") final Long id) {
-        EmploymentContractDto employmentContractFound = employmentContractService.findEmploymentContractById(id);
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + employmentContractFound.getFileName() + "\"")
-                .body(employmentContractFound.getData());
-    }
 
+    // DOWNLOAD MULTIPLE FILES or A SINGLE FILE IN ZIP
+    // Example links:
+    // localhost:8080/api/employment-contracts-zip?fileName=Employment-Contract-henri.pdf
+    // localhost:8080/api/employment-contracts-zip
+    @GetMapping(value = "employment-contracts-zip", produces="application/zip")
+    public byte[] zipDownload(EmploymentContractSearchDto<EmploymentContract> searchDto) throws IOException {
+
+        // List of employment contracts
+        List<EmploymentContractDto> employmentContracts = employmentContractService.findAllEmploymentContracts(searchDto);
+
+        // Map of file names and byte arrays
+        Map<String, byte[]> files = new HashMap<>();
+
+        for (EmploymentContractDto employmentContract : employmentContracts) {
+            String filename = employmentContract.getFileName();
+            byte[] bytes = employmentContract.getData();
+            files.put(filename, bytes);
+        }
+
+        // Zip files from the MAP
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        for (Map.Entry<String, byte[]> contracts : files.entrySet()) {
+            ZipEntry entry = new ZipEntry(contracts.getKey());
+            entry.setSize(contracts.getValue().length);
+            zos.putNextEntry(entry);
+            zos.write(contracts.getValue());
+        }
+        zos.closeEntry();
+        zos.close();
+        return baos.toByteArray();
+        }
 }
+
+
+
+
+
+
+
+
+
+

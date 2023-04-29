@@ -1,7 +1,7 @@
 package com.knits.enterprise.service.common;
 
 import com.knits.enterprise.dto.common.EmploymentContractDto;
-import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.dto.search.EmploymentContractSearchDto;
 import com.knits.enterprise.mapper.common.EmploymentContractMapper;
 import com.knits.enterprise.model.common.EmploymentContract;
 import com.knits.enterprise.repository.common.EmploymentContractRepository;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,10 +32,8 @@ public class EmploymentContractService {
     }
 
     @Transactional
-    public EmploymentContractDto findEmploymentContractById(Long id) {
-        EmploymentContract employmentContract = employmentContractRepository.findById(id).orElseThrow(() ->
-                new UserException("Employment contract id: " + id + " not found"));
-        return employmentContractMapper.toDto(employmentContract);
+    public List<EmploymentContractDto> findAllEmploymentContracts(EmploymentContractSearchDto<EmploymentContract> searchDto) {
+        List<EmploymentContract> employmentContractList = employmentContractRepository.findAll(searchDto.getSpecification());
+        return employmentContractMapper.toDtos(employmentContractList);
     }
-
 }
