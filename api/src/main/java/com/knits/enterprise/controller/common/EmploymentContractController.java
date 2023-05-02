@@ -3,7 +3,6 @@ package com.knits.enterprise.controller.common;
 import com.knits.enterprise.dto.common.EmploymentContractDto;
 import com.knits.enterprise.dto.search.EmploymentContractSearchDto;
 import com.knits.enterprise.http.ResponseMessage;
-import com.knits.enterprise.mapper.common.EmploymentContractMapper;
 import com.knits.enterprise.model.common.EmploymentContract;
 import com.knits.enterprise.service.common.EmploymentContractService;
 import com.knits.enterprise.validation.FileValidation;
@@ -13,9 +12,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.tags.form.InputTag;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,42 +59,66 @@ public class EmploymentContractController {
     // Example links:
     // localhost:8080/api/employment-contracts-zip?fileName=Employment-Contract-henri.pdf
     // localhost:8080/api/employment-contracts-zip
-    @GetMapping(value = "employment-contracts-zip", produces="application/zip")
+    @GetMapping(value = "employment-contracts-zip", produces = "application/zip")
     public byte[] zipDownload(EmploymentContractSearchDto<EmploymentContract> searchDto) throws IOException {
 
-        // List of employment contracts
         List<EmploymentContractDto> employmentContracts = employmentContractService.findAllEmploymentContracts(searchDto);
+        return employmentContractService.generateZip(employmentContracts);
+    }
 
-        // Map of file names and byte arrays
-        Map<String, byte[]> files = new HashMap<>();
+    // api/employees/contracts/all @Return a list of contract ids
+    @GetMapping(value = "employees/contracts/all", produces = {"application/json"})
+    public List<Long> getAllEmploymentContractIds() {
+        return employmentContractService.findAllEmploymentContractsIds();
+    }
 
-        for (EmploymentContractDto employmentContract : employmentContracts) {
-            String filename = employmentContract.getFileName();
-            byte[] bytes = employmentContract.getData();
-            files.put(filename, bytes);
+    //api/employees/contracts/ids=1,2,3
+    //Returns all documents fetched by ids in a .zip file.
+    //For every id that is not found, a text file should be generated (and added to zip) with missing id as filename and a default text.
+    @GetMapping(value = "employees/contracts/{id}", produces = "application/zip")
+    public byte[] getByIdZip(@PathVariable(value = "id") final List<Long> ids) throws IOException {
+
+        // to determine which Ids are not present
+        Map<Long, Boolean> map = new HashMap<>();
+
+        for (Long id : ids) {
+            if (employmentContractService.findAllEmploymentContractsById(id).isEmpty()) {
+                map.put(id, false);
+            } else {
+                map.put(id, true);
+            }
         }
 
-        // Zip files from the MAP
+        List<Long> keyList = new ArrayList<>(map.keySet());
+
+        List<EmploymentContract> employmentContracts = employmentContractService.findAllEmploymentContractsByIds(ids);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
-        for (Map.Entry<String, byte[]> contracts : files.entrySet()) {
-            ZipEntry entry = new ZipEntry(contracts.getKey());
-            entry.setSize(contracts.getValue().length);
-            zos.putNextEntry(entry);
-            zos.write(contracts.getValue());
+
+        for (int i = 0; i < map.size(); i++) {
+
+            if(map.get(keyList.get(i)) && employmentContractService.findAllEmploymentContractsById(ids.get(i)).isPresent()) {
+
+                ZipEntry entry = new ZipEntry(employmentContracts.get(i).getFileName());
+                entry.setSize(employmentContracts.size());
+                zos.putNextEntry(entry);
+                zos.write(employmentContracts.get(i).getData());
+
+            } else {
+                File myTxtFile = new File(ids.get(i).toString());
+                FileWriter myWriter = new FileWriter(ids.get(i).toString());
+                myWriter.write("Employment contract not found!");
+                myWriter.close();
+
+                ZipEntry entry = new ZipEntry(ids.get(i).toString());
+                entry.setSize(map.size());
+                zos.putNextEntry(entry);
+                zos.write(Files.readAllBytes(myTxtFile.toPath()));
+            }
         }
         zos.closeEntry();
         zos.close();
         return baos.toByteArray();
-        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
