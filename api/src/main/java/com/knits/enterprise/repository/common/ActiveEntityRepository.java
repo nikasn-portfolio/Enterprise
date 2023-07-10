@@ -1,7 +1,6 @@
 package com.knits.enterprise.repository.common;
 
 import com.knits.enterprise.model.common.AbstractActiveEntity;
-import com.knits.enterprise.model.common.EmploymentContract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,10 +15,6 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface ActiveEntityRepository <T extends AbstractActiveEntity> extends JpaRepository <T,Long>, JpaSpecificationExecutor<T> {
-    @Transactional
-    @Modifying
-    @Query("select p.id from #{#entityName} p")
-    List<Long> getAllIds();
 
     @Override
     @Transactional
