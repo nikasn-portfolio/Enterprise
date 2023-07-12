@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/api")
 @Slf4j
 public class JobTitleController {
 
     @Autowired
     private JobTitleService jobTitleService;
+
 
 
     @PostMapping(value = "/jobtitles", produces = {"application/json"}, consumes = {"application/json"})
