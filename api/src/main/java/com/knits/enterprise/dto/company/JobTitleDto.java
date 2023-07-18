@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 public class JobTitleDto extends AbstractOrganizationStructureDto{
+
     @NotNull()
     private String name;
     @NotNull()
