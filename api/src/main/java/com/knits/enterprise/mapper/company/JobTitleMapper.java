@@ -15,4 +15,6 @@ import org.springframework.stereotype.Component;
         uses = {UserMapper.class})
 public interface JobTitleMapper extends AbstractOrganizationStructureMapper<JobTitle, JobTitleDto> {
 
+
+
 }

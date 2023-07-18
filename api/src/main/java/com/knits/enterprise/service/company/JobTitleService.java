@@ -30,4 +30,16 @@ public class JobTitleService {
         return jobTitleMapper.toDto(savedJobTitle);
     }
 
+    public JobTitleDto deactivateJobTitle(Long jobTitleId) {
+
+        JobTitle deactivateJobTitle = jobTitleRepository.findById(jobTitleId).orElse(null);
+        if (deactivateJobTitle != null) {
+            deactivateJobTitle.setEndDate(LocalDateTime.now());
+            deactivateJobTitle.setActive(false);
+            JobTitle savedJobTitle = jobTitleRepository.save(deactivateJobTitle);
+            return jobTitleMapper.toDto(savedJobTitle);
+        }
+        return null;
+
+    }
 }
