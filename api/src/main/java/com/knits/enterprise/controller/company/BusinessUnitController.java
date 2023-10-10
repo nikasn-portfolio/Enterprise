@@ -34,9 +34,9 @@ public class BusinessUnitController {
                 .body(businessUnitFound);
     }
 
-    @PutMapping(value = "/businessUnits/{id}", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<BusinessUnitDto> deactivateBusinessUnit(@PathVariable(value = "id") Long id, @RequestBody BusinessUnitDto businessUnitDto) {
-        BusinessUnitDto businessUnitFound = businessUnitService.deactivateBusinessUnit(businessUnitDto);
+    @PutMapping(value = "/businessUnits/{id}", produces = {"application/json"})
+    public ResponseEntity<BusinessUnitDto> deactivateBusinessUnit(@PathVariable(value = "id") Long id) {
+        BusinessUnitDto businessUnitFound = businessUnitService.deactivateBusinessUnit(id);
         return ResponseEntity
                 .ok()
                 .body(businessUnitFound);
