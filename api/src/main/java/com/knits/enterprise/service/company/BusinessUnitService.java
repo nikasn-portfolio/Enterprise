@@ -46,8 +46,8 @@ public class BusinessUnitService {
     }
 
     @Transactional
-    public BusinessUnitDto partialUpdate(BusinessUnitDto businessUnitDto) {
-        BusinessUnit businessUnit = businessUnitRepository.findById(businessUnitDto.getId()).orElseThrow(() -> new UserException("BusinessUnit#" + businessUnitDto.getId() + " not found"));
+    public BusinessUnitDto partialUpdate(Long id,BusinessUnitDto businessUnitDto) {
+        BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
         businessUnitMapper.partialUpdate(businessUnit, businessUnitDto);
         businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(businessUnit);

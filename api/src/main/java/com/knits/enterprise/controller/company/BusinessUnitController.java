@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
@@ -23,7 +25,7 @@ public class BusinessUnitController {
     private BusinessUnitService businessUnitService;
 
     @PostMapping(value = "/businessUnits", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<BusinessUnitDto> createNewBusinessUnit(@RequestBody BusinessUnitDto businessUnitDto) {
+    public ResponseEntity<BusinessUnitDto> createNewBusinessUnit(@Valid @RequestBody BusinessUnitDto businessUnitDto) {
         log.debug("REST request to create BusinessUnit");
         return ResponseEntity
                 .ok()
@@ -32,7 +34,7 @@ public class BusinessUnitController {
 
     @PatchMapping(value = "/businessUnits/{id}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<BusinessUnitDto> updateBusinessUnit(@PathVariable(value = "id") Long id, @RequestBody BusinessUnitDto businessUnitDto) {
-        BusinessUnitDto businessUnitFound = businessUnitService.partialUpdate(businessUnitDto);
+        BusinessUnitDto businessUnitFound = businessUnitService.partialUpdate(id,businessUnitDto);
         return ResponseEntity
                 .ok()
                 .body(businessUnitFound);
