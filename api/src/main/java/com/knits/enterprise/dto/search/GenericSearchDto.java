@@ -60,11 +60,18 @@ public class GenericSearchDto<T>{
         );
     }
 
-    @JsonIgnore
+    /*@JsonIgnore
     public Sort getSortSpec() {
         if (sort == null) return Sort.unsorted();
         return (dir != null && dir == Sort.Direction.DESC) ?
                 Sort.by(sort).descending() : Sort.by(sort).ascending();
+    }*/
+
+    @JsonIgnore
+    public Sort getSortSpec() {
+        if (sort == null) return Sort.unsorted();
+        String[] properties = sort.split(",");
+        return (dir != null && dir == Sort.Direction.DESC ? Sort.by(properties).descending() : Sort.by(properties).ascending());
     }
 
     protected void addFilters(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
