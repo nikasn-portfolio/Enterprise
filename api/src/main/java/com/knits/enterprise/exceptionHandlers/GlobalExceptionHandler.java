@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<CustomError> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
@@ -28,7 +27,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<CustomError> handleNotFoundErrors(UserException ex){
         List<String> errors = List.of(ex.getMessage());
         return new ResponseEntity<>(new CustomError(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
