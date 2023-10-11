@@ -73,8 +73,6 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "200", description = "Business is deactivated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
-            schema = @Schema(implementation = CustomError.class))}),
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = CustomError.class))})
     })
