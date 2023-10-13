@@ -1,5 +1,6 @@
 package com.knits.enterprise.service.company;
 
+import com.knits.enterprise.config.Constants;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
 import com.knits.enterprise.dto.company.EmployeeDto;
@@ -30,17 +31,14 @@ public class BusinessUnitService {
     private final BusinessUnitRepository businessUnitRepository;
 
     private final BusinessUnitMapper businessUnitMapper;
-
     private final UserMapper userMapper;
-
-    private final UserService userService;
 
     @Transactional
     public BusinessUnitDto saveNewBusinessUnit(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitMapper.toEntity(businessUnitDto);
         businessUnit.setActive(true);
         businessUnit.setStartDate(LocalDateTime.now());
-        businessUnit.setCreatedBy(userMapper.toEntity(userService.getCurrentHardCodedUser()));
+        businessUnit.setCreatedBy(userMapper.toEntity(Constants.hardcodedUserDto));
         BusinessUnit savedBusinessUnit = businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(savedBusinessUnit);
     }
@@ -60,6 +58,7 @@ public class BusinessUnitService {
         return businessUnitMapper.toDto(businessUnit);
     }
 
+    @Transactional
     public PaginatedResponseDto<BusinessUnitDto> listAll(GenericSearchDto<BusinessUnit> searchDto) {
 
         Page<BusinessUnit> businessUnitPages = businessUnitRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());

@@ -96,20 +96,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserDto getCurrentHardCodedUser(){
-        UserDto userDto = UserDto.builder()
-                .id(1L)
-                .firstName("mock-admin")
-                .lastName("mock-admin")
-                .login("mock-admin")
-                .email("admin@enterprise.org")
-                .password("not-hashed-pw-cant-use-for-login")
-                .active(true)
-                .build();
-
-        return userDto;
-    }
-
     /**
      * Get all the users.
      *
