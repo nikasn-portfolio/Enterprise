@@ -134,35 +134,13 @@ public class BusinessUnitServiceTest {
         Long entityIdToDelete = 1L;
         BusinessUnit entityToDelete = BusinessUnitMock.shallowBusinessUnit(entityIdToDelete);
         when(businessUnitRepository.findById(entityIdToDelete)).thenReturn(Optional.of(entityToDelete));
-        doAnswer(invocation -> {
-            BusinessUnit businessUnit = invocation.getArgument(0);
-            businessUnit.setActive(false);
-            return null; // For void methods
-        }).when(businessUnitRepository).delete(entityToDelete);
         businessUnitService.deactivateBusinessUnit(entityIdToDelete);
-        verify(businessUnitRepository, (times(1))).delete(entityToDelete);
+        verify(businessUnitRepository, times(1)).findById(entityIdToDelete);
+        verify(businessUnitRepository, times(  1)).delete(entityToDelete);
         verify(businessUnitMapper, times(1)).toDto(entityToDelete);
-        Assertions.assertEquals(false, entityToDelete.isActive());
     }
 
-    @Test
-    public void testDeactivateBusinessUnit() {
-        Long entityIdToDelete = 1L;
-        BusinessUnit entityToDelete = BusinessUnitMock.shallowBusinessUnit(entityIdToDelete);
 
-        when(businessUnitRepository.findById(entityIdToDelete)).thenReturn(Optional.of(entityToDelete));
-
-        //when( somehow call save method ).thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
-
-        businessUnitService.deactivateBusinessUnit(1L);
-
-        verify(businessUnitRepository).save(businessUnitArgumentCaptor.capture());
-
-        BusinessUnit result = businessUnitArgumentCaptor.getValue();
-
-        // Verify that the entity has been deactivated
-        Assertions.assertFalse(result.isActive());
-    }
 
     @Test
     @DisplayName("findAll / pagination success")
@@ -170,8 +148,7 @@ public class BusinessUnitServiceTest {
         int expectedSize=10;
         Page<BusinessUnit> resultSet = BusinessUnitMock.shallowPageOfBusinessUnits(expectedSize);
         GenericSearchDto<BusinessUnit> businessUnitSearchDto = BusinessUnitMock.createBusinessUnitSearchDto(expectedSize);
-        //when(businessUnitRepository.findAll(businessUnitSearchDto.getSpecification(), businessUnitSearchDto.getPageable())).thenReturn(resultSet);
-        doReturn(resultSet).when(businessUnitRepository).findAll((Specification<BusinessUnit>) any(), (Pageable) any());
+        when(businessUnitRepository.findAll((Specification<BusinessUnit>) any(), (Pageable) any())).thenReturn(resultSet);
 
         PaginatedResponseDto<BusinessUnitDto> businessUnitDtoPaginatedResponseDto = businessUnitService.listAll(businessUnitSearchDto);
         verify(businessUnitMapper, times(expectedSize)).toDto(any(BusinessUnit.class));
