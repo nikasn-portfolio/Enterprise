@@ -1,10 +1,12 @@
 package com.knits.enterprise.controller.company;
 
 import com.knits.enterprise.dto.company.EmployeeDto;
+import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.service.company.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,17 @@ public class EmployeeController {
         return ResponseEntity
                 .ok()
                 .body(employeeFound);
+    }
+
+    @GetMapping(value = "/employeeSearch", produces = {"application/json"})
+    public ResponseEntity<PageImpl<EmployeeDto>> searchForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
+        if(searchDto == null){
+            searchDto = new EmployeeSearchDto();
+        }
+        PageImpl<EmployeeDto> foundedEmployeeDtos = employeeService.searchForEmployees(searchDto);
+        return ResponseEntity
+                .ok()
+                .body(foundedEmployeeDtos);
     }
 
 

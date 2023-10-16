@@ -13,6 +13,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -23,15 +25,28 @@ import java.util.List;
 @Slf4j
 public class EmployeeSearchDto extends GenericSearchDto<Employee>{
 
+    private String firstName;
     private String lastName;
     private String gender;
+
+    private String hireDateFrom;
+
+    private String hireDateTo;
+
+    private Long businessUnit;
+
+    private Long department;
+
+    private Long jobTitle;
+
+    private Long office;
 
 
 
     protected void addFilters(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
 
         if (StringUtils.isNotEmpty(lastName)){
-            Predicate lastNameAsPredicate = criteriaBuilder.equal(root.get("lastName"), lastName);
+            Predicate lastNameAsPredicate = criteriaBuilder.equal(root.get("lastName"), "%" + lastName + "%");
             filters.add(lastNameAsPredicate);
         }
 
@@ -39,6 +54,50 @@ public class EmployeeSearchDto extends GenericSearchDto<Employee>{
             Predicate genderAsPredicate = criteriaBuilder.equal(root.get("gender"), gender);
             filters.add(genderAsPredicate);
         }
+
+        if (StringUtils.isNotEmpty(firstName)){
+            Predicate firstNameAsPredicate = criteriaBuilder.like(root.get("firstName"), "%" + firstName + "%");
+            filters.add(firstNameAsPredicate);
+        }
+
+        if (StringUtils.isNotEmpty(hireDateFrom)){
+            LocalDate from = LocalDate.parse(hireDateFrom, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Predicate hiringDateFromAsPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), from);
+            filters.add(hiringDateFromAsPredicate);
+        }
+
+        if (StringUtils.isNotEmpty(hireDateFrom)){
+            LocalDate from = LocalDate.parse(hireDateFrom, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Predicate hiringDateFromAsPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), from);
+            filters.add(hiringDateFromAsPredicate);
+        }
+
+        if (StringUtils.isNotEmpty(hireDateTo)){
+            LocalDate to = LocalDate.parse(hireDateTo, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Predicate endingDateFromAsPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), to);
+            filters.add(endingDateFromAsPredicate);
+        }
+
+        if (office != null){
+            Predicate officeAsPredicate = criteriaBuilder.equal(root.get("office").get("id"), office);
+            filters.add(officeAsPredicate);
+        }
+
+        if (businessUnit != null){
+            Predicate businessUnitAsPredicate = criteriaBuilder.equal(root.get("businessUnit").get("id"), businessUnit);
+            filters.add(businessUnitAsPredicate);
+        }
+
+        if(department != null){
+            Predicate departmentAsPredicate = criteriaBuilder.equal(root.get("department").get("id"), department);
+            filters.add(departmentAsPredicate);
+        }
+
+        if(jobTitle != null){
+            Predicate jobTitleAsPredicate = criteriaBuilder.equal(root.get("jobTitle").get("id"), jobTitle);
+            filters.add(jobTitleAsPredicate);
+        }
+
     }
 
 

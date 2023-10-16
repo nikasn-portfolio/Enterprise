@@ -3,6 +3,7 @@ package com.knits.enterprise.service.company;
 
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.EmployeeDto;
+import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.exceptions.UserException;
 import com.knits.enterprise.mapper.company.EmployeeMapper;
@@ -11,6 +12,7 @@ import com.knits.enterprise.repository.company.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +72,12 @@ public class EmployeeService {
                 .sortDirection(searchDto.getDir().name())
                 .data(employeeDtos)
                 .build();
+    }
+
+    public PageImpl<EmployeeDto> searchForEmployees(EmployeeSearchDto searchDto){
+        Page<Employee> foundEmployees = employeeRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
+        List<EmployeeDto> listEmployeesDtos = employeeMapper.toDtos(foundEmployees.getContent());
+        return new PageImpl<>(listEmployeesDtos, searchDto.getPageable(), foundEmployees.getTotalElements());
     }
 }
 
