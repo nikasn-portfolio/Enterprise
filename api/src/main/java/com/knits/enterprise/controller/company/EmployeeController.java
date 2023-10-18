@@ -76,6 +76,15 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(value = "/employeeExel")
+    public ResponseEntity addEmployeesFromExcelFile(@RequestBody String pathToFile){
+        if(pathToFile == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        employeeService.addEmployeeFromExelFile(pathToFile);
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }
