@@ -23,7 +23,7 @@ public class AbstractOrganizationStructureDto extends AbstractActiveDto {
     private String name;
     @Size(max = 255, message = "Description should not exceed 255 characters")
     private String description;
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}")
+
     private String startDate;
     private String endDate;
 

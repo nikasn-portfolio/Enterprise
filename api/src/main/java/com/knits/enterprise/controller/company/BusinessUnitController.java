@@ -2,12 +2,9 @@ package com.knits.enterprise.controller.company;
 
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
-import com.knits.enterprise.dto.company.EmployeeDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
+import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
 import com.knits.enterprise.exceptionHandlers.CustomError;
-import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.service.company.BusinessUnitService;
-import com.knits.enterprise.service.company.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,9 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,10 +55,9 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = CustomError.class))})
     })
-    @PatchMapping(value = "/businessUnits/{id}", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<BusinessUnitDto> updateBusinessUnit(@Parameter(description = "id of business unit to be updated") @PathVariable(value = "id") Long id,
-                                                              @RequestBody BusinessUnitDto businessUnitDto) {
-        BusinessUnitDto businessUnitFound = businessUnitService.partialUpdate(id, businessUnitDto);
+    @PatchMapping(value = "/businessUnits", produces = {"application/json"}, consumes = {"application/json"})
+    public ResponseEntity<BusinessUnitDto> updateBusinessUnit(@RequestBody BusinessUnitDto businessUnitDto) {
+        BusinessUnitDto businessUnitFound = businessUnitService.partialUpdate(businessUnitDto);
         return ResponseEntity
                 .ok()
                 .body(businessUnitFound);
@@ -78,10 +73,39 @@ public class BusinessUnitController {
     })
     @PutMapping(value = "/businessUnits/{id}", produces = {"application/json"})
     public ResponseEntity<BusinessUnitDto> deactivateBusinessUnit(@Parameter(description = "id of business unit to be deactivated") @PathVariable(value = "id") Long id) {
-        BusinessUnitDto businessUnitFound = businessUnitService.deactivateBusinessUnit(id);
+        businessUnitService.deactivateBusinessUnit(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(summary = "Deactivates business unit")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Business is deactivated",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BusinessUnitDto.class))}),
+            @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = CustomError.class))})
+    })
+    @DeleteMapping(value = "/businessUnits/{id}")
+    public ResponseEntity<BusinessUnitDto> deleteBusinessUnit(@Parameter(description = "id of business unit to be deactivated") @PathVariable(value = "id") Long id) {
+        businessUnitService.deleteBusinessUnit(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(summary = "Gets business unit by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Business unit is found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BusinessUnitDto.class))}),
+            @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = CustomError.class))})
+    })
+    @GetMapping(value = "/businessUnits/{id}", produces = {"application/json"})
+    public ResponseEntity<BusinessUnitDto> getBusinessUnitById(@Parameter(description = "id of business unit to be found") @PathVariable(value = "id") Long id) {
         return ResponseEntity
                 .ok()
-                .body(businessUnitFound);
+                .body(businessUnitService.findBusinessUnitById(id));
     }
 
     @Operation(summary = "Gets paginated business unit")
@@ -92,9 +116,20 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = CustomError.class))})
     })
-    @GetMapping(value = "/businessUnits", produces = {"application/json"}, consumes = {"application/json"})
-    public PaginatedResponseDto<BusinessUnitDto> getPaginatedContent(@Parameter(description = "object describes parameters for pagination") @RequestBody GenericSearchDto<BusinessUnit> searchDto) {
+    @GetMapping(value = "/businessUnits", produces = {"application/json"})
+    public PaginatedResponseDto<BusinessUnitDto> getPaginatedContent(@RequestParam(value = "page", required = false) Integer page,
+                                                                     @RequestParam(value = "limit", required = false) Integer limit,
+                                                                     @RequestParam(value = "sort", required = false) String sort,
+                                                                     @RequestParam(value = "dir", required = false) Sort.Direction dir,
+                                                                     @RequestParam(value = "name", required = false) String name) {
+        BusinessUnitSearchDto searchDto = new BusinessUnitSearchDto();
+        if(page != null) searchDto.setPage(page);
+        if(limit != null) searchDto.setLimit(limit);
+        if(sort != null) searchDto.setSort(sort);
+        if(dir != null) searchDto.setDir(dir);
+        if(name != null) searchDto.setName(name);
         PaginatedResponseDto<BusinessUnitDto> paginatedResponseDto = businessUnitService.listAll(searchDto);
+        System.out.println(paginatedResponseDto);
         return paginatedResponseDto;
     }
 }

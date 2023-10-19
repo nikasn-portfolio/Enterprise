@@ -1,10 +1,8 @@
 package com.knits.enterprise.service.company;
 
-import com.knits.enterprise.config.Constants;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
-import com.knits.enterprise.dto.company.EmployeeDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
+import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
 import com.knits.enterprise.dto.security.UserDto;
 import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.company.BusinessUnitMapperImpl;
@@ -12,29 +10,17 @@ import com.knits.enterprise.mapper.security.UserMapperImpl;
 import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.BusinessUnitMock;
 import com.knits.enterprise.model.company.BusinessUnit;
-import com.knits.enterprise.model.company.Employee;
-import com.knits.enterprise.model.security.User;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
-import com.knits.enterprise.repository.security.UserRepository;
-import com.knits.enterprise.service.security.UserService;
-import jdk.jfr.Description;
-import lombok.Builder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -114,7 +100,7 @@ public class BusinessUnitServiceTest {
 
         when(businessUnitRepository.findById(entityIdToUpdate)).thenReturn(Optional.of(foundEntity));
 
-        BusinessUnitDto updatedDto = businessUnitService.partialUpdate(entityIdToUpdate, toUpdateDto);
+        BusinessUnitDto updatedDto = businessUnitService.partialUpdate(toUpdateDto);
 
         verify(businessUnitRepository).save(businessUnitArgumentCaptor.capture());
 
@@ -129,7 +115,7 @@ public class BusinessUnitServiceTest {
     }
 
     @Test
-    @DisplayName("delete success")
+    @DisplayName("deactivation success")
     void deleteSuccess (){
         Long entityIdToDelete = 1L;
         BusinessUnit entityToDelete = BusinessUnitMock.shallowBusinessUnit(entityIdToDelete);
@@ -147,12 +133,32 @@ public class BusinessUnitServiceTest {
     void findAllSuccess (){
         int expectedSize=10;
         Page<BusinessUnit> resultSet = BusinessUnitMock.shallowPageOfBusinessUnits(expectedSize);
-        GenericSearchDto<BusinessUnit> businessUnitSearchDto = BusinessUnitMock.createBusinessUnitSearchDto(expectedSize);
+        BusinessUnitSearchDto businessUnitSearchDto = BusinessUnitMock.createBusinessUnitSearchDto(expectedSize);
         when(businessUnitRepository.findAll((Specification<BusinessUnit>) any(), (Pageable) any())).thenReturn(resultSet);
 
         PaginatedResponseDto<BusinessUnitDto> businessUnitDtoPaginatedResponseDto = businessUnitService.listAll(businessUnitSearchDto);
         verify(businessUnitMapper, times(expectedSize)).toDto(any(BusinessUnit.class));
         assertThat(businessUnitDtoPaginatedResponseDto.getData().size()).isEqualTo(expectedSize);
+    }
+
+    @Test
+    @DisplayName("delete success")
+    void deleteByIdSuccess (){
+        Long entityId = 1L;
+        BusinessUnit savedEntity = BusinessUnitMock.shallowBusinessUnit(entityId);
+        when(businessUnitRepository.findAllBusinessUnits()).thenReturn(Collections.singletonList(savedEntity));
+        businessUnitService.deleteBusinessUnit(entityId);
+        verify(businessUnitRepository,times(1)).deleteBusinessUnitById(entityId);
+    }
+
+    @Test
+    @DisplayName("findById success")
+    void findByIdSuccess(){
+        Long entityId = 1L;
+        BusinessUnit savedEntity = BusinessUnitMock.shallowBusinessUnit(entityId);
+        when(businessUnitRepository.findById(entityId)).thenReturn(Optional.of(savedEntity));
+        businessUnitService.findBusinessUnitById(entityId);
+        verify(businessUnitRepository,times(1)).findById(entityId);
     }
 
 

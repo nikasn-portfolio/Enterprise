@@ -1,5 +1,6 @@
 package com.knits.enterprise.model;
 
+import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.model.company.BusinessUnit;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,8 @@ public class BusinessUnitMock {
                 .build();
     }
 
-    public static GenericSearchDto<BusinessUnit> createBusinessUnitSearchDto(int limit) {
-        return new GenericSearchDto<BusinessUnit>(limit,0,"id",Sort.Direction.DESC);
+    public static BusinessUnitSearchDto createBusinessUnitSearchDto(int limit) {
+        return new BusinessUnitSearchDto().toBuilder().limit(limit).build();
     }
 
     public static Page<BusinessUnit> shallowPageOfBusinessUnits(int size) {

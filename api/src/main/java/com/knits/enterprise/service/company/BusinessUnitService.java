@@ -3,17 +3,12 @@ package com.knits.enterprise.service.company;
 import com.knits.enterprise.config.Constants;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
-import com.knits.enterprise.dto.company.EmployeeDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
-import com.knits.enterprise.dto.security.UserDto;
+import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
 import com.knits.enterprise.exceptions.UserException;
 import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.company.BusinessUnit;
-import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
-import com.knits.enterprise.repository.security.UserRepository;
-import com.knits.enterprise.service.security.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,8 +39,8 @@ public class BusinessUnitService {
     }
 
     @Transactional
-    public BusinessUnitDto partialUpdate(Long id,BusinessUnitDto businessUnitDto) {
-        BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
+    public BusinessUnitDto partialUpdate(BusinessUnitDto businessUnitDto) {
+        BusinessUnit businessUnit = businessUnitRepository.findById(businessUnitDto.getId()).orElseThrow(() -> new UserException("BusinessUnit#" + businessUnitDto.getId() + " not found"));
         businessUnitMapper.partialUpdate(businessUnit, businessUnitDto);
         businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(businessUnit);
@@ -59,7 +54,23 @@ public class BusinessUnitService {
     }
 
     @Transactional
-    public PaginatedResponseDto<BusinessUnitDto> listAll(GenericSearchDto<BusinessUnit> searchDto) {
+    public BusinessUnitDto findBusinessUnitById(Long id) {
+        BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
+        return businessUnitMapper.toDto(businessUnit);
+    }
+
+    @Transactional
+    public void deleteBusinessUnit(Long id) {
+        List<BusinessUnit> allBusinessUnits = businessUnitRepository.findAllBusinessUnits();
+        BusinessUnit businessUnit = allBusinessUnits.stream()
+                .filter(unit -> unit.getId().equals(id))
+                .findFirst()
+                .orElseThrow((() -> new UserException("BusinessUnit#" + id + " not found")));
+        businessUnitRepository.deleteBusinessUnitById(businessUnit.getId());
+    }
+
+    @Transactional
+    public PaginatedResponseDto<BusinessUnitDto> listAll(BusinessUnitSearchDto searchDto) {
 
         Page<BusinessUnit> businessUnitPages = businessUnitRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
         List<BusinessUnitDto> businessUnitDtos = businessUnitMapper.toDtos(businessUnitPages.getContent());
@@ -72,5 +83,7 @@ public class BusinessUnitService {
                 .data(businessUnitDtos)
                 .build();
     }
+
+
 
 }
