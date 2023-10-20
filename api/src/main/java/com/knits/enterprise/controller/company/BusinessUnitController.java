@@ -78,7 +78,7 @@ public class BusinessUnitController {
                 .status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(summary = "Deactivates business unit")
+    @Operation(summary = "Deletes business unit")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Business is deactivated",
                     content = {@Content(mediaType = "application/json",
@@ -87,7 +87,7 @@ public class BusinessUnitController {
                     schema = @Schema(implementation = CustomError.class))})
     })
     @DeleteMapping(value = "/businessUnits/{id}")
-    public ResponseEntity<BusinessUnitDto> deleteBusinessUnit(@Parameter(description = "id of business unit to be deactivated") @PathVariable(value = "id") Long id) {
+    public ResponseEntity<BusinessUnitDto> deleteBusinessUnit(@Parameter(description = "id of business unit to be deleted") @PathVariable(value = "id") Long id) {
         businessUnitService.deleteBusinessUnit(id);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT).build();
@@ -108,20 +108,18 @@ public class BusinessUnitController {
                 .body(businessUnitService.findBusinessUnitById(id));
     }
 
-    @Operation(summary = "Gets paginated business unit")
+    @Operation(summary = "Gets paginated business unit also can be filtered by name")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pagination is successful",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BusinessUnitDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                            schema = @Schema(implementation = BusinessUnitDto.class))})
     })
     @GetMapping(value = "/businessUnits", produces = {"application/json"})
-    public PaginatedResponseDto<BusinessUnitDto> getPaginatedContent(@RequestParam(value = "page", required = false) Integer page,
-                                                                     @RequestParam(value = "limit", required = false) Integer limit,
-                                                                     @RequestParam(value = "sort", required = false) String sort,
-                                                                     @RequestParam(value = "dir", required = false) Sort.Direction dir,
-                                                                     @RequestParam(value = "name", required = false) String name) {
+    public PaginatedResponseDto<BusinessUnitDto> getPaginatedContent(@Parameter (description = "page number (optional)") @RequestParam(value = "page", required = false) Integer page,
+                                                                     @Parameter (description = "size of content (optional)") @RequestParam(value = "limit", required = false) Integer limit,
+                                                                     @Parameter (description = "sort parameters separated by comma (optional)") @RequestParam(value = "sort", required = false) String sort,
+                                                                     @Parameter (description = "sort direction (optional)")@RequestParam(value = "dir", required = false) Sort.Direction dir,
+                                                                     @Parameter (description = "name to be searched by (optional)")@RequestParam(value = "name", required = false) String name) {
         BusinessUnitSearchDto searchDto = new BusinessUnitSearchDto();
         if(page != null) searchDto.setPage(page);
         if(limit != null) searchDto.setLimit(limit);
