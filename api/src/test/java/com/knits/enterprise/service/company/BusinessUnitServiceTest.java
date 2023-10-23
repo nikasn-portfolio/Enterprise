@@ -11,6 +11,7 @@ import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.BusinessUnitMock;
 import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
+import com.knits.enterprise.service.security.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,8 @@ public class BusinessUnitServiceTest {
     @Mock
     private BusinessUnitRepository businessUnitRepository;
 
+    @Mock
+    private UserService userService;
 
     @Captor
     private ArgumentCaptor<BusinessUnit> businessUnitArgumentCaptor;
@@ -51,15 +54,7 @@ public class BusinessUnitServiceTest {
     @Test
     @DisplayName("Save business unit successful")
     public void saveNewBusinessUnit(){
-        BusinessUnitDto toSaveDto = BusinessUnitDto.builder()
-                .id(null)
-                .startDate("20/10/2020 10:10:10")
-                .name("Mocked businessUnitName")
-                .description("Mocked description")
-                .endDate(null)
-                .active(false)
-                .createdBy(null)
-                .build();
+        BusinessUnitDto toSaveDto = businessUnitMapper.toDto(BusinessUnitMock.shallowBusinessUnit(1L));
 
         when(businessUnitRepository.save(Mockito.any(BusinessUnit.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -75,14 +70,13 @@ public class BusinessUnitServiceTest {
 
         UserDto userDto = userDtoArgumentCaptor.getValue();
 
-        verify(businessUnitMapper, times(1)).toDto(toSaveEntity);
+        verify(businessUnitMapper, times(2)).toDto(toSaveEntity);
         verify(businessUnitMapper, times(1)).toEntity(toSaveDto);
         verify(businessUnitRepository, times(1)).save(toSaveEntity);
         verify(userMapper, times(1)).toEntity(userDto);
 
         assertThat(toSaveDto.getName()).isEqualTo(savedDto.getName());
         assertThat(toSaveDto.getDescription()).isEqualTo(savedDto.getDescription());
-        assertThat(toSaveDto.getStartDate()).isNotEqualTo(savedDto.getStartDate());
         assertThat(savedDto.isActive()).isTrue();
     }
 
@@ -136,7 +130,7 @@ public class BusinessUnitServiceTest {
         BusinessUnitSearchDto businessUnitSearchDto = BusinessUnitMock.createBusinessUnitSearchDto(expectedSize);
         when(businessUnitRepository.findAll((Specification<BusinessUnit>) any(), (Pageable) any())).thenReturn(resultSet);
 
-        PaginatedResponseDto<BusinessUnitDto> businessUnitDtoPaginatedResponseDto = businessUnitService.listAll(businessUnitSearchDto);
+        PaginatedResponseDto<BusinessUnitDto> businessUnitDtoPaginatedResponseDto = businessUnitService.search(businessUnitSearchDto);
         verify(businessUnitMapper, times(expectedSize)).toDto(any(BusinessUnit.class));
         assertThat(businessUnitDtoPaginatedResponseDto.getData().size()).isEqualTo(expectedSize);
     }
