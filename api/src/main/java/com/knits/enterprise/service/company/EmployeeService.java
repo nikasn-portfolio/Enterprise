@@ -173,10 +173,13 @@ public class EmployeeService {
 
     }
 
-    public void addEmployeeFromExelFile(String filePath) {
+    public void addEmployeeFromExelFile(String fileName) {
         List<Employee> employees = new ArrayList<>();
         try {
-            InputStream fis = Files.newInputStream(Path.of(filePath));
+            Path pathToFile = Files.find(Path.of("src/test/java/resources"), 1, (path, attr) -> path.toString().contains(fileName))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("File not found"));
+            InputStream fis = Files.newInputStream(pathToFile);
             Workbook workbook = new XSSFWorkbook(fis);
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
 
