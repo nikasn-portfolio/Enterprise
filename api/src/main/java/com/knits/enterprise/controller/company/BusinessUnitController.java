@@ -122,7 +122,7 @@ public class BusinessUnitController {
                                                                      @Parameter (description = "name to be searched by (optional)")@RequestParam(value = "name", required = false) String name) {
         BusinessUnitSearchDto searchDto = new BusinessUnitSearchDto();
         searchDto.setFieldsIfNull(page, limit, sort, dir, name);
-        PaginatedResponseDto<BusinessUnitDto> paginatedResponseDto = businessUnitService.listAll(searchDto);
+        PaginatedResponseDto<BusinessUnitDto> paginatedResponseDto = businessUnitService.search(searchDto);
         return paginatedResponseDto;
     }
 }

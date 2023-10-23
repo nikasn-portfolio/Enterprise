@@ -73,7 +73,7 @@ public class BusinessUnitService {
     }
 
     @Transactional
-    public PaginatedResponseDto<BusinessUnitDto> listAll(BusinessUnitSearchDto searchDto) {
+    public PaginatedResponseDto<BusinessUnitDto> search(BusinessUnitSearchDto searchDto) {
 
         Page<BusinessUnit> businessUnitPages = businessUnitRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
         List<BusinessUnitDto> businessUnitDtos = businessUnitMapper.toDtos(businessUnitPages.getContent());
