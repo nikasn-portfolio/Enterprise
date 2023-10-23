@@ -7,9 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.ByteArrayOutputStream;
 
 
 @RestController
@@ -72,8 +75,10 @@ public class EmployeeController {
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
         }
-        employeeService.makeExelOfEmployees(searchDto);
-        return ResponseEntity.ok().build();
+        ByteArrayOutputStream report = employeeService.makeExelOfEmployees(searchDto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=report.xlsx");
+        return ResponseEntity.ok().headers(headers).body(report.toByteArray());
     }
 
     @PostMapping(value = "/employeeExel")
