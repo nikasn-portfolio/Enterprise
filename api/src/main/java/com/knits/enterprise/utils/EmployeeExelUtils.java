@@ -1,6 +1,8 @@
 package com.knits.enterprise.utils;
 
 import com.knits.enterprise.dto.company.EmployeeDto;
+import com.knits.enterprise.model.company.Employee;
+import com.knits.enterprise.model.enums.Gender;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,43 +37,48 @@ public class EmployeeExelUtils {
     }
     public static void initEmployeeExcelHeaders(Sheet sheet, CreationHelper creationHelper) {
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue(
-                creationHelper.createRichTextString("firstName"));
-        row.createCell(1).setCellValue(
-                creationHelper.createRichTextString("lastname"));
-        row.createCell(2).setCellValue(
-                creationHelper.createRichTextString("email"));
-        row.createCell(3).setCellValue(
-                creationHelper.createRichTextString("birthDate"));
-        row.createCell(4).setCellValue(
-                creationHelper.createRichTextString("gender"));
-        row.createCell(5).setCellValue(
-                creationHelper.createRichTextString("startDate"));
-        row.createCell(6).setCellValue(
-                creationHelper.createRichTextString("endDate"));
-        row.createCell(7).setCellValue(
-                creationHelper.createRichTextString("companyPhone"));
-        row.createCell(8).setCellValue(
-                creationHelper.createRichTextString("role"));
-        row.createCell(9).setCellValue(
-                creationHelper.createRichTextString("businessUnit"));
-        row.createCell(10).setCellValue(
-                creationHelper.createRichTextString("organization"));
-        row.createCell(11).setCellValue(
-                creationHelper.createRichTextString("office"));
-        row.createCell(12).setCellValue(
-                creationHelper.createRichTextString("jobTitle"));
-        row.createCell(13).setCellValue(
-                creationHelper.createRichTextString("department"));
-        row.createCell(14).setCellValue(
-                creationHelper.createRichTextString("division"));
-        row.createCell(15).setCellValue(
-                creationHelper.createRichTextString("solidLineManager"));
+        row.createCell(0).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.FIRST_NAME_KEY));
+        row.createCell(1).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.LAST_NAME_KEY));
+        row.createCell(2).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.EMAIL_KEY));
+        row.createCell(3).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.BIRTH_DATE_KEY));
+        row.createCell(4).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.GENDER_KEY));
+        row.createCell(5).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.START_DATE_KEY));
+        row.createCell(6).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.END_DATE_KEY));
+        row.createCell(7).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.COMPANY_PHONE_KEY));
+        row.createCell(8).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.ROLE_KEY));
+        row.createCell(9).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.BUSINESS_UNIT_KEY));
+        row.createCell(10).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.ORGANIZATION_KEY));
+        row.createCell(11).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.OFFICE_KEY));
+        row.createCell(12).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.JOB_TITLE_KEY));
+        row.createCell(13).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.DEPARTMENT_KEY));
+        row.createCell(14).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.DIVISION_KEY));
+        row.createCell(15).setCellValue(creationHelper.createRichTextString(ExcelEmployeeKeys.SOLID_LINE_MANAGER_KEY));
     }
 
     public static void setWidthOfColumns(Sheet sheet){
         for (int i = 0; i <= 16; i++) {
             sheet.setColumnWidth(i, 15*256);
         }
+    }
+
+    public static Employee createEmployeeFromRow(Row row){
+        Employee employee = new Employee();
+        employee.setFirstName(row.getCell(0).getStringCellValue());
+        employee.setLastName(row.getCell(1).getStringCellValue());
+        employee.setEmail(row.getCell(2).getStringCellValue());
+        employee.setBirthDate(row.getCell(3).getLocalDateTimeCellValue().toLocalDate());
+        employee.setGender(Gender.valueOf(row.getCell(4).getStringCellValue()));
+        employee.setStartDate(row.getCell(5).getLocalDateTimeCellValue().toLocalDate());
+        employee.setEndDate(row.getCell(6) != null ? row.getCell(6).getLocalDateTimeCellValue().toLocalDate() : null);
+        employee.setCompanyPhone(String.valueOf(row.getCell(7).getStringCellValue()));
+        employee.setCompanyMobileNumber(String.valueOf(row.getCell(7).getStringCellValue()));
+        employee.setBusinessUnit(null);
+        employee.setOrganization(null);
+        employee.setOffice(null);
+        employee.setJobTitle(null);
+        employee.setDepartment(null);
+        employee.setDivision(null);
+        employee.setSolidLineManager(null);
+        return employee;
     }
 }

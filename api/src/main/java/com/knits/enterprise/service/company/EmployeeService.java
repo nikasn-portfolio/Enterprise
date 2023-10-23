@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.knits.enterprise.utils.EmployeeExelUtils.createEmployeeFromRow;
+
 
 @Service
 @Transactional
@@ -108,14 +110,6 @@ public class EmployeeService {
         Sheet sheet = wb.createSheet("main");
         if (listEmployeesDtos.isEmpty()) return null;
         EmployeeExelUtils.intoExcel(sheet, listEmployeesDtos, creationHelper);
-        // Write the output to a file
-        /*try (OutputStream fileOut = new FileOutputStream("Employees-.xlsx")) {
-            wb.write(fileOut);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
         try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             wb.write(byteArrayOutputStream);
             return byteArrayOutputStream;
@@ -142,8 +136,7 @@ public class EmployeeService {
             }
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Employee employee = createEmployeeFromRow(row);
-                System.out.println(employee.toString());
+                Employee employee = EmployeeExelUtils.createEmployeeFromRow(row);
                 employees.add(employee);
             }
             fis.close();
@@ -153,26 +146,7 @@ public class EmployeeService {
         employeeRepository.saveAll(employees);
     }
 
-    public Employee createEmployeeFromRow(Row row){
-        Employee employee = new Employee();
-        employee.setFirstName(row.getCell(0).getStringCellValue());
-        employee.setLastName(row.getCell(1).getStringCellValue());
-        employee.setEmail(row.getCell(2).getStringCellValue());
-        employee.setBirthDate(row.getCell(3).getLocalDateTimeCellValue().toLocalDate());
-        employee.setGender(Gender.valueOf(row.getCell(4).getStringCellValue()));
-        employee.setStartDate(row.getCell(5).getLocalDateTimeCellValue().toLocalDate());
-        employee.setEndDate(row.getCell(6) != null ? row.getCell(6).getLocalDateTimeCellValue().toLocalDate() : null);
-        employee.setCompanyPhone(String.valueOf(row.getCell(7).getStringCellValue()));
-        employee.setCompanyMobileNumber(String.valueOf(row.getCell(7).getStringCellValue()));
-        employee.setBusinessUnit(null);
-        employee.setOrganization(null);
-        employee.setOffice(null);
-        employee.setJobTitle(null);
-        employee.setDepartment(null);
-        employee.setDivision(null);
-        employee.setSolidLineManager(null);
-        return employee;
-    }
+
 }
 
 
