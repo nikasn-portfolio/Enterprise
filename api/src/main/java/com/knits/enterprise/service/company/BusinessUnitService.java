@@ -9,6 +9,7 @@ import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
+import com.knits.enterprise.service.security.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,12 +29,14 @@ public class BusinessUnitService {
     private final BusinessUnitMapper businessUnitMapper;
     private final UserMapper userMapper;
 
+    private final UserService userService;
+
     @Transactional
     public BusinessUnitDto saveNewBusinessUnit(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitMapper.toEntity(businessUnitDto);
         businessUnit.setActive(true);
         businessUnit.setStartDate(LocalDateTime.now());
-        businessUnit.setCreatedBy(userMapper.toEntity(Constants.hardcodedUserDto));
+        businessUnit.setCreatedBy(userMapper.toEntity(userService.getCurrentUser()));
         BusinessUnit savedBusinessUnit = businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(savedBusinessUnit);
     }
@@ -76,7 +79,7 @@ public class BusinessUnitService {
         List<BusinessUnitDto> businessUnitDtos = businessUnitMapper.toDtos(businessUnitPages.getContent());
 
         return PaginatedResponseDto.<BusinessUnitDto>builder()
-                .page(searchDto.getPage())
+                .page(searchDto.getPage() != null ? searchDto.getPage() : 0)
                 .size(businessUnitDtos.size())
                 .sortingFields(searchDto.getSort())
                 .sortDirection(searchDto.getDir().name())

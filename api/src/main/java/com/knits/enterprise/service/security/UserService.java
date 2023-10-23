@@ -106,6 +106,18 @@ public class UserService {
         throw new UnsupportedOperationException("not yet implementes");
     }
 
+    public UserDto getCurrentUser() {
+        return UserDto.builder()
+                .id(1L)
+                .firstName("mock-admin")
+                .lastName("mock-admin")
+                .login("mock-admin")
+                .email("admin@enterprise.org")
+                .password("not-hashed-pw-cant-use-for-login")
+                .active(true)
+                .build();
+    }
+
 
 
 

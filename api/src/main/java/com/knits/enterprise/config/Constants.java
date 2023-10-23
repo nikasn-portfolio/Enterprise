@@ -22,14 +22,4 @@ public final class Constants {
     public static final String TIME_FORMAT_DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy HH:mm:ss";
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT_DD_MM_YYYY);
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT_DD_MM_YYYY_HH_MM_SS);
-
-    public static UserDto hardcodedUserDto = UserDto.builder()
-            .id(1L)
-            .firstName("mock-admin")
-            .lastName("mock-admin")
-            .login("mock-admin")
-            .email("admin@enterprise.org")
-            .password("not-hashed-pw-cant-use-for-login")
-            .active(true)
-            .build();
 }

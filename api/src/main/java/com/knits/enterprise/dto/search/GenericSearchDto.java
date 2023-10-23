@@ -37,6 +37,8 @@ public class GenericSearchDto<T>{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Sort.Direction dir=Sort.DEFAULT_DIRECTION;
 
+
+
     @JsonIgnore
     public Specification<T> getSpecification() {
         return (root, query, criteriaBuilder) -> {
@@ -48,7 +50,6 @@ public class GenericSearchDto<T>{
             return criteriaBuilder.and(filters.toArray(new Predicate[filters.size()]));
         };
     }
-
 
 
     @JsonIgnore
@@ -77,5 +78,7 @@ public class GenericSearchDto<T>{
     protected void addFilters(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
         log.debug("Override this method to provide additional filters in subclasses if needed");
     }
+
+
 
 }

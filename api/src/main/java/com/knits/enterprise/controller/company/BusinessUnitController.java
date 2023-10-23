@@ -121,13 +121,8 @@ public class BusinessUnitController {
                                                                      @Parameter (description = "sort direction (optional)")@RequestParam(value = "dir", required = false) Sort.Direction dir,
                                                                      @Parameter (description = "name to be searched by (optional)")@RequestParam(value = "name", required = false) String name) {
         BusinessUnitSearchDto searchDto = new BusinessUnitSearchDto();
-        if(page != null) searchDto.setPage(page);
-        if(limit != null) searchDto.setLimit(limit);
-        if(sort != null) searchDto.setSort(sort);
-        if(dir != null) searchDto.setDir(dir);
-        if(name != null) searchDto.setName(name);
+        searchDto.setFieldsIfNull(page, limit, sort, dir, name);
         PaginatedResponseDto<BusinessUnitDto> paginatedResponseDto = businessUnitService.listAll(searchDto);
-        System.out.println(paginatedResponseDto);
         return paginatedResponseDto;
     }
 }
