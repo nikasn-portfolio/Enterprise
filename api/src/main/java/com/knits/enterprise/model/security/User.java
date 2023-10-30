@@ -1,5 +1,8 @@
 package com.knits.enterprise.model.security;
 
+import com.knits.enterprise.model.common.AbstractActiveEntity;
+import com.knits.enterprise.model.company.AbstractOrganizationStructure;
+import com.knits.enterprise.model.company.Group;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * A user.
@@ -44,4 +48,5 @@ public class User implements Serializable {
     @Column(nullable = false)
     @Builder.Default
     private Boolean active = false;
+
 }

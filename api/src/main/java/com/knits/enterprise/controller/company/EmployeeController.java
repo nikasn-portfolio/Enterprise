@@ -1,5 +1,6 @@
 package com.knits.enterprise.controller.company;
 
+import com.knits.enterprise.dto.common.EmployeeAnalyticsDto;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.service.company.EmployeeService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 
 @RestController
@@ -88,6 +90,22 @@ public class EmployeeController {
         }
         employeeService.addEmployeeFromExelFile(fileName);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/addEmployeesToGroup")
+    public ResponseEntity assignEmployeeToGroup(@RequestParam(value = "groupId") Long groupId,
+                                              @RequestParam(value = "employeeIds") String employeeIds){
+        if(groupId == null || employeeIds == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        employeeService.assignEmployeeToGroup(groupId, employeeIds);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/employeeAnalysis", produces = {"application/json"})
+    public ResponseEntity assignEmployeeToGroup(){
+        EmployeeAnalyticsDto employeeAnalyticsDto = employeeService.employeeAnalytics();
+        return ResponseEntity.ok().body(employeeAnalyticsDto);
     }
 
 

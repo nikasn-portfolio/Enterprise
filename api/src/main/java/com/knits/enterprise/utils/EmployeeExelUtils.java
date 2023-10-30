@@ -6,7 +6,13 @@ import com.knits.enterprise.model.enums.Gender;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class EmployeeExelUtils {
@@ -80,5 +86,27 @@ public class EmployeeExelUtils {
         employee.setDivision(null);
         employee.setSolidLineManager(null);
         return employee;
+    }
+
+    public static InputStream findFileStream(String fileName){
+        InputStream fis = null;
+        try{
+            Path pathToFile = Files.find(Path.of("src/test/java/resources"), 1, (path, attr) -> path.toString().contains(fileName))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("File not found"));
+            fis = Files.newInputStream(pathToFile);
+        }catch (Exception e){
+        }
+        return fis;
+    }
+
+    public static ByteArrayOutputStream createByteOutputStreamFromWorkbook(Workbook workbook){
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            workbook.write(bos);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return bos;
     }
 }

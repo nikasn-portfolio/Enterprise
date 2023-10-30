@@ -26,7 +26,5 @@ public class AbstractOrganizationStructureDto extends AbstractActiveDto {
 
     private String startDate;
     private String endDate;
-
-    //@NotNull
     private UserDto createdBy;
 }

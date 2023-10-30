@@ -18,6 +18,7 @@ spring:
       hibernate:
         dialect: "org.hibernate.dialect.PostgreSQLDialect"
         format_sql: true
+    show-sql: true
   mvc:
     format:
       date-time: iso

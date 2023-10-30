@@ -1,44 +1,40 @@
 package com.knits.enterprise.service.company;
 
 
-import com.knits.enterprise.config.Constants;
-import com.knits.enterprise.dto.common.PaginatedResponseDto;
+import com.knits.enterprise.dto.common.*;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.mapper.company.BusinessUnitMapper;
+import com.knits.enterprise.mapper.company.DepartmentMapper;
 import com.knits.enterprise.mapper.company.EmployeeMapper;
+import com.knits.enterprise.mapper.company.JobTitleMapper;
+import com.knits.enterprise.mapper.location.LocationMapper;
 import com.knits.enterprise.model.company.Employee;
-import com.knits.enterprise.model.enums.Gender;
+import com.knits.enterprise.model.company.Group;
 import com.knits.enterprise.repository.company.EmployeeRepository;
-import com.knits.enterprise.utils.Constant;
+import com.knits.enterprise.repository.company.GroupRepository;
+import com.knits.enterprise.response.EmployeeGroupResponse;
 import com.knits.enterprise.utils.EmployeeExelUtils;
+import com.knits.enterprise.view.AgeGroupCountView;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.*;
-import org.apache.poi.OldFileFormatException.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.formula.WorkbookEvaluator;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.knits.enterprise.utils.EmployeeExelUtils.createEmployeeFromRow;
+import static com.knits.enterprise.utils.EmployeeExelUtils.createByteOutputStreamFromWorkbook;
+import static com.knits.enterprise.utils.EmployeeExelUtils.findFileStream;
 
 
 @Service
@@ -48,7 +44,16 @@ import static com.knits.enterprise.utils.EmployeeExelUtils.createEmployeeFromRow
 public class EmployeeService {
 
     private final EmployeeMapper employeeMapper;
+
+    private final BusinessUnitMapper businessUnitMapper;
+
+    private final JobTitleMapper jobTitleMapper;
+
+    private final DepartmentMapper departmentMapper;
+
+    private final LocationMapper locationMapper;
     private final EmployeeRepository employeeRepository;
+    private final GroupRepository groupRepository;
 
 
     @Transactional
@@ -110,21 +115,13 @@ public class EmployeeService {
         Sheet sheet = wb.createSheet("main");
         if (listEmployeesDtos.isEmpty()) return null;
         EmployeeExelUtils.intoExcel(sheet, listEmployeesDtos, creationHelper);
-        try(ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-            wb.write(byteArrayOutputStream);
-            return byteArrayOutputStream;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return createByteOutputStreamFromWorkbook(wb);
     }
 
     public void addEmployeeFromExelFile(String fileName) {
         List<Employee> employees = new ArrayList<>();
         try {
-            Path pathToFile = Files.find(Path.of("src/test/java/resources"), 1, (path, attr) -> path.toString().contains(fileName))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("File not found"));
-            InputStream fis = Files.newInputStream(pathToFile);
+            InputStream fis = findFileStream(fileName);
             Workbook workbook = new XSSFWorkbook(fis);
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
 
@@ -144,6 +141,108 @@ public class EmployeeService {
             e.printStackTrace();
         }
         employeeRepository.saveAll(employees);
+    }
+
+    @Transactional
+    public EmployeeGroupResponse assignEmployeeToGroup(Long groupId, String ids) {
+        Group groupFounded = groupRepository.findByIdWithEmployees(groupId).orElseThrow(() -> new UserException("Group#" + groupId + " not found"));
+        List<Long> employeeIds = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        Set<Employee> employeesFounded = new LinkedHashSet<>(employeeRepository.findAllById(employeeIds));
+        groupFounded.setEmployees(employeesFounded);
+        Group savedEntity = groupRepository.save(groupFounded);
+        return null;
+    }
+
+
+    @Transactional
+    public EmployeeAnalyticsDto employeeAnalytics() {
+        List<AgeGroupCountView> ageGroupCountViews = employeeRepository.countEmployeesByAgeGroup();
+
+        List<EmployeesCountByAgeGroupDto> employeesCountByAgeGroupDtos = ageGroupCountViews.stream().map(view -> {
+            return new EmployeesCountByAgeGroupDto(view.getAgeGroup(), view.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesCountByGenderDto> employeesCountByGenderDtos = employeeRepository.countEmployeesByGender();
+
+        List<EmployeesCountByOfficeDto> employeesCountByOfficesDtos = employeeRepository.countEmployeesByOffice().stream().map(projection -> {
+            return new EmployeesCountByOfficeDto(locationMapper.toDto(projection.getOffice()), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesCountByBusinessUnitDto> employeesCountByBusinessUnitsDtos = employeeRepository.countEmployeesByBusinessUnit().stream().map(projection -> {
+            return new EmployeesCountByBusinessUnitDto(businessUnitMapper.toDto(projection.getBusinessUnit()), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesCountByJobTitleDto> employeesCountByJobTitlesDtos = employeeRepository.countEmployeesByJobTitle().stream().map(projection -> {
+            return new EmployeesCountByJobTitleDto(jobTitleMapper.toDto(projection.getJobTitle()), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesCountInDepartmentDto> employeesCountByDepartmentsDtos = employeeRepository.countEmployeesByDepartment().stream().map(projection -> {
+            return new EmployeesCountInDepartmentDto(departmentMapper.toDto(projection.getDepartment()), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesCountByExperienceDto> employeesCountByExperienceDtos = employeeRepository.countEmployeesByExperience().stream().map(view -> {
+            return new EmployeesCountByExperienceDto(view.getExperienceGroup(), view.getEmployeesCount());
+        }).collect(Collectors.toList());
+        List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtos = employeeRepository.countHiredEmployeesByYear().stream().map(projection -> {
+            return new EmployeesHiredCountByYearDto(projection.getYearNumber(), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtos = employeeRepository.countLeftEmployeesByYear().stream().map(projection -> {
+            return new EmployeesLeftCountByYearDto(projection.getYearNumber(), projection.getEmployeesCount());
+        }).collect(Collectors.toList());
+
+        List<EmployeesTotalCountByYearDto> employeesTotalCountByYears = new ArrayList<>(    );
+        makeListOfTotalEmployeesCountPerYear(employeesTotalCountByYears, employeesHiredCountByYearDtos, employeesLeftCountByYearDtos);
+
+        EmployeesCountInBusinessUnitDto bestEmployeesCountInBusinessUnitDto = employeeRepository.findMaxEmployeeCountByBusinessUnit(PageRequest.of(0, 1)).stream().map(projection -> {
+            return new EmployeesCountInBusinessUnitDto(businessUnitMapper.toDto(projection.getBusinessUnit()), projection.getEmployeesCount());
+        }).findAny().orElse(null);
+
+        EmployeesCountInJobTitleDto bestEmployeesCountInJobTitleDto = employeeRepository.findMaxEmployeeCountByJobTitle(PageRequest.of(0, 1)).stream().map(projection -> {
+            return new EmployeesCountInJobTitleDto(jobTitleMapper.toDto(projection.getJobTitle()), projection.getEmployeesCount());
+        }).findAny().orElse(null);
+
+        EmployeesCountInDepartmentDto bestEmployeesCountInDepartment = employeeRepository.findMaxEmployeeCountByDepartment(PageRequest.of(0, 1)).stream().map(projection -> {
+            return new EmployeesCountInDepartmentDto(departmentMapper.toDto(projection.getDepartment()), projection.getEmployeesCount());
+        }).findAny().orElse(null);
+
+
+        return EmployeeAnalyticsDto.builder()
+                .employeesCountByAgeGroupDtos(employeesCountByAgeGroupDtos)
+                .employeesCountByGenderDtos(employeesCountByGenderDtos)
+                .employeesCountByOffices(employeesCountByOfficesDtos)
+                .employeesCountByBusinessUnitDtos(employeesCountByBusinessUnitsDtos)
+                .employeesCountByJobTitleDtos(employeesCountByJobTitlesDtos)
+                .employeesCountInDepartmentDtos(employeesCountByDepartmentsDtos)
+                .employeesCountByExperienceDtos(employeesCountByExperienceDtos)
+                .employeesHiredCountByYearDtos(employeesHiredCountByYearDtos)
+                .employeesLeftCountByYearDtos(employeesLeftCountByYearDtos)
+                .employeesTotalCountByYearDtos(employeesTotalCountByYears)
+                .employeesCountInBusinessUnitDto(bestEmployeesCountInBusinessUnitDto)
+                .employeesCountInJobTitleDto(bestEmployeesCountInJobTitleDto)
+                .employeesCountInDepartmentDto(bestEmployeesCountInDepartment)
+                .build();
+    }
+
+    public void makeListOfTotalEmployeesCountPerYear(List<EmployeesTotalCountByYearDto> employeesTotalCountByYearDtoList, List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtosList, List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtosList){
+        for (EmployeesHiredCountByYearDto employeesHiredCountByYearDto : employeesHiredCountByYearDtosList) {
+            String currentYear = employeesHiredCountByYearDto.getYear();
+            Long hiredDuringCurrentYear = employeesHiredCountByYearDto.getEmployeesCount();
+            EmployeesTotalCountByYearDto employeesTotalCountByYear = new EmployeesTotalCountByYearDto();
+            employeesTotalCountByYear.setYear(currentYear);
+            employeesTotalCountByYear.setEmployeesCount(hiredDuringCurrentYear);
+            for (EmployeesLeftCountByYearDto employeesLeftCountByYearDto : employeesLeftCountByYearDtosList) {
+                if(employeesLeftCountByYearDto.getYear().equals(currentYear)){
+                    if(!employeesTotalCountByYearDtoList.isEmpty()){
+                        employeesTotalCountByYear.setEmployeesCount(employeesTotalCountByYear.getEmployeesCount() - employeesLeftCountByYearDto.getEmployeesCount() + employeesTotalCountByYearDtoList.get(employeesTotalCountByYearDtoList.size()-1).getEmployeesCount());
+                    }else {
+                        employeesTotalCountByYear.setEmployeesCount(employeesTotalCountByYear.getEmployeesCount() - employeesLeftCountByYearDto.getEmployeesCount());
+                    }
+                }
+            }
+            employeesTotalCountByYearDtoList.add(employeesTotalCountByYear);
+        }
+
     }
 
 
