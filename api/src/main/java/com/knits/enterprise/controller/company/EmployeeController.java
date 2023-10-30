@@ -1,6 +1,6 @@
 package com.knits.enterprise.controller.company;
 
-import com.knits.enterprise.dto.common.EmployeeAnalyticsDto;
+import com.knits.enterprise.dto.analytics.EmployeeAnalyticsDto;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.service.company.EmployeeService;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 
 @RestController

@@ -3,8 +3,10 @@ package com.knits.enterprise.repository.company;
 import com.knits.enterprise.analyticsModel.EmployeesCountByBusinessUnit;
 import com.knits.enterprise.analyticsModel.EmployeesCountByDepartment;
 import com.knits.enterprise.analyticsModel.EmployeesCountByJobTitle;
+import com.knits.enterprise.dto.analytics.EmployeesHiredCountByYearDto;
+import com.knits.enterprise.dto.analytics.EmployeesLeftCountByYearDto;
 import com.knits.enterprise.view.*;
-import com.knits.enterprise.dto.common.EmployeesCountByGenderDto;
+import com.knits.enterprise.dto.analytics.EmployeesCountByGenderDto;
 import com.knits.enterprise.analyticsModel.EmployeesCountByOffice;
 import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.repository.common.ActiveEntityRepository;
@@ -33,6 +35,23 @@ public interface EmployeeRepository extends ActiveEntityRepository<Employee> {
             "  FROM Employee e where EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) >= 20 GROUP BY ageGroup")
     List<AgeGroupCountView> countEmployeesByAgeGroup();
 
+    /*@Query("SELECT new com.knits.enterprise.dto.analytics.EmployeesCountByAgeGroupDto(" +
+            "CASE " +
+            "    WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 20 AND 24 THEN '20-24' " +
+            "    WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 25 AND 29 THEN '25-29' " +
+            "    WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 30 AND 34 THEN '30-34' " +
+            "    WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 35 AND 39 THEN '35-39' " +
+            "    ELSE '40+' " +
+            "  END, COUNT(e))" +
+            "  FROM Employee e where EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) >= 20 " +
+            "  GROUP BY CASE " +
+            "  WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 20 AND 24 THEN '20-24' " +
+            "  WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 25 AND 29 THEN '25-29' " +
+            "  WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 30 AND 34 THEN '30-34' " +
+            "  WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.birthDate) BETWEEN 35 AND 39 THEN '35-39' " +
+            "  ELSE '40+' END ")
+    List<EmployeesCountByAgeGroupDto> countEmployeesByAgeGroup2();*/
+
     @Query("SELECT CASE " +
             "WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.startDate) = 1 THEN '1'" +
             "WHEN EXTRACT(YEAR FROM current_date) - EXTRACT(YEAR FROM e.startDate) = 2 THEN '2'" +
@@ -43,7 +62,7 @@ public interface EmployeeRepository extends ActiveEntityRepository<Employee> {
             "GROUP BY experienceGroup")
     List<EmployeesCountByExperienceView> countEmployeesByExperience();
 
-    @Query("SELECT new com.knits.enterprise.dto.common.EmployeesCountByGenderDto(e.gender , COUNT(e)) FROM Employee e GROUP BY e.gender")
+    @Query("SELECT new com.knits.enterprise.dto.analytics.EmployeesCountByGenderDto(e.gender , COUNT(e)) FROM Employee e GROUP BY e.gender")
     List<EmployeesCountByGenderDto> countEmployeesByGender();
 
     @Query("SELECT new com.knits.enterprise.analyticsModel.EmployeesCountByOffice(e.office , COUNT(e)) FROM Employee e GROUP BY e.office")
@@ -58,29 +77,29 @@ public interface EmployeeRepository extends ActiveEntityRepository<Employee> {
     @Query("SELECT new com.knits.enterprise.analyticsModel.EmployeesCountByDepartment(e.department , COUNT(e)) FROM Employee e GROUP BY e.department")
     List<EmployeesCountByDepartment> countEmployeesByDepartment();
 
-    @Query("SELECT EXTRACT(YEAR FROM e.startDate) as yearNumber, count(e) as employeesCount FROM Employee e WHERE EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.startDate) <= 15 " +
-            " GROUP BY yearNumber ORDER BY EXTRACT(YEAR FROM e.startDate) ASC")
-    List<EmployeesCountByYearView> countHiredEmployeesByYear();
+    @Query("SELECT new com.knits.enterprise.dto.analytics.EmployeesHiredCountByYearDto( CONCAT('', EXTRACT(YEAR FROM e.startDate)), count(e)) FROM Employee e WHERE EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.startDate) <= 15 " +
+            " GROUP BY EXTRACT(YEAR FROM e.startDate) ORDER BY EXTRACT(YEAR FROM e.startDate) ASC")
+    List<EmployeesHiredCountByYearDto> countHiredEmployeesByYear();
 
-    @Query("SELECT EXTRACT(YEAR FROM e.endDate) as yearNumber, count(e) as employeesCount FROM Employee e WHERE EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.endDate) <= 15" +
+    @Query("SELECT new com.knits.enterprise.dto.analytics.EmployeesLeftCountByYearDto( CONCAT('', EXTRACT(YEAR FROM e.endDate)) , count(e)) FROM Employee e WHERE EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM e.endDate) <= 15" +
             " and e.endDate is not null " +
-            " GROUP BY yearNumber ORDER BY EXTRACT(YEAR FROM e.endDate) ASC")
-    List<EmployeesCountByYearView> countLeftEmployeesByYear();
+            " GROUP BY EXTRACT(YEAR FROM e.endDate) ORDER BY EXTRACT(YEAR FROM e.endDate) ASC")
+    List<EmployeesLeftCountByYearDto> countLeftEmployeesByYear();
 
-    @Query(value = "SELECT e.businessUnit as businessUnit, count(e) as employeesCount " +
+    @Query(value = "SELECT new com.knits.enterprise.analyticsModel.EmployeesCountByBusinessUnit(e.businessUnit, count(e))" +
             " FROM Employee e join e.businessUnit b where e.businessUnit is not null " +
-            " GROUP BY b, e.businessUnit ORDER BY employeesCount DESC")
-    List<EmployeesCountInBusinessUnitView> findMaxEmployeeCountByBusinessUnit(PageRequest limit);
+            " GROUP BY b, e.businessUnit ORDER BY count(e) DESC")
+    List<EmployeesCountByBusinessUnit> findMaxEmployeeCountByBusinessUnit(PageRequest limit);
 
-    @Query(value = "SELECT e.jobTitle as jobTitle, count(e) as employeesCount " +
+    @Query(value = "SELECT new com.knits.enterprise.analyticsModel.EmployeesCountByJobTitle(e.jobTitle, count(e))" +
             " FROM Employee e join e.jobTitle b where e.jobTitle is not null " +
-            " GROUP BY b, e.jobTitle ORDER BY employeesCount DESC")
-    List<EmployeesCountInJobTitleView> findMaxEmployeeCountByJobTitle(PageRequest limit);
+            " GROUP BY b, e.jobTitle ORDER BY count(e) DESC")
+    List<EmployeesCountByJobTitle> findMaxEmployeeCountByJobTitle(PageRequest limit);
 
-    @Query(value = "SELECT e.department as department, count(e) as employeesCount " +
+    @Query(value = "SELECT new com.knits.enterprise.analyticsModel.EmployeesCountByDepartment(e.department, count(e))" +
             " FROM Employee e join e.department b where e.department is not null " +
-            " GROUP BY b, e.department ORDER BY employeesCount DESC")
-    List<EmployeesCountInDepartmentView> findMaxEmployeeCountByDepartment(PageRequest limit);
+            " GROUP BY b, e.department ORDER BY count(e) DESC")
+    List<EmployeesCountByDepartment> findMaxEmployeeCountByDepartment(PageRequest limit);
 
 
 }

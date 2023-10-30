@@ -1,4 +1,4 @@
-package com.knits.enterprise.dto.common;
+package com.knits.enterprise.dto.analytics;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ public class EmployeeAnalyticsDto {
 
     private List<EmployeesTotalCountByYearDto> employeesTotalCountByYearDtos;
 
-    private List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtos;
+    private List<EmployeesHiredCountByYearDto> employeesHiredCountByYear;
 
     private List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtos;
 

@@ -1,6 +1,7 @@
 package com.knits.enterprise.service.company;
 
 
+import com.knits.enterprise.dto.analytics.*;
 import com.knits.enterprise.dto.common.*;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
@@ -183,15 +184,11 @@ public class EmployeeService {
         List<EmployeesCountByExperienceDto> employeesCountByExperienceDtos = employeeRepository.countEmployeesByExperience().stream().map(view -> {
             return new EmployeesCountByExperienceDto(view.getExperienceGroup(), view.getEmployeesCount());
         }).collect(Collectors.toList());
-        List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtos = employeeRepository.countHiredEmployeesByYear().stream().map(projection -> {
-            return new EmployeesHiredCountByYearDto(projection.getYearNumber(), projection.getEmployeesCount());
-        }).collect(Collectors.toList());
+        List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtos = employeeRepository.countHiredEmployeesByYear();
 
-        List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtos = employeeRepository.countLeftEmployeesByYear().stream().map(projection -> {
-            return new EmployeesLeftCountByYearDto(projection.getYearNumber(), projection.getEmployeesCount());
-        }).collect(Collectors.toList());
+        List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtos = employeeRepository.countLeftEmployeesByYear();
 
-        List<EmployeesTotalCountByYearDto> employeesTotalCountByYears = new ArrayList<>(    );
+        List<EmployeesTotalCountByYearDto> employeesTotalCountByYears = new ArrayList<>();
         makeListOfTotalEmployeesCountPerYear(employeesTotalCountByYears, employeesHiredCountByYearDtos, employeesLeftCountByYearDtos);
 
         EmployeesCountInBusinessUnitDto bestEmployeesCountInBusinessUnitDto = employeeRepository.findMaxEmployeeCountByBusinessUnit(PageRequest.of(0, 1)).stream().map(projection -> {
@@ -215,7 +212,7 @@ public class EmployeeService {
                 .employeesCountByJobTitleDtos(employeesCountByJobTitlesDtos)
                 .employeesCountInDepartmentDtos(employeesCountByDepartmentsDtos)
                 .employeesCountByExperienceDtos(employeesCountByExperienceDtos)
-                .employeesHiredCountByYearDtos(employeesHiredCountByYearDtos)
+                .employeesHiredCountByYear(employeesHiredCountByYearDtos)
                 .employeesLeftCountByYearDtos(employeesLeftCountByYearDtos)
                 .employeesTotalCountByYearDtos(employeesTotalCountByYears)
                 .employeesCountInBusinessUnitDto(bestEmployeesCountInBusinessUnitDto)

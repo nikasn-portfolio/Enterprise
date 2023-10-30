@@ -1,4 +1,4 @@
-package com.knits.enterprise.dto.common;
+package com.knits.enterprise.dto.analytics;
 
 import lombok.Data;
 
