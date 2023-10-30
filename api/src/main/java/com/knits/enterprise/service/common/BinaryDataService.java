@@ -24,19 +24,19 @@ public class BinaryDataService {
 
 
     public void saveTestPdfFile() {
-        InputStream fileStream = findFileStream("EmployeeData.xlsx");
-        Workbook wb = null;
+        InputStream fileStream = findFileStream("Employment-Contract-Agreement.pdf");
         try {
-            wb = new XSSFWorkbook(fileStream);
-        } catch (Exception e) {
-            log.error("Error while initializing reference to file", e);
+            byte[] buffer = new byte[fileStream.available()];
+            int bytesRead = fileStream.read(buffer);
+            BinaryData data = BinaryData.builder().title("test")
+                    .contentType("application/pdf")
+                    .bytes(buffer)
+                    .size(Long.valueOf(buffer.length)).build();
+            binaryDataRepository.save(data);
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-        byte[] bytesOfExcelFile = createByteOutputStreamFromWorkbook(wb).toByteArray();
-        BinaryData data = BinaryData.builder().title("test")
-                .contentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                .bytes(bytesOfExcelFile)
-                .size(Long.valueOf(bytesOfExcelFile.length)).build();
-        binaryDataRepository.save(data);
+
     }
 
 }
