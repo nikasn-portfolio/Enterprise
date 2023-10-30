@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class BinaryDataController {
     private final BinaryDataService binaryDataRepository;
 
-    @PostMapping(value = "/saveTestExcelFile", produces = {"application/json"})
-    public ResponseEntity saveTestExcelFile() {
+    @PostMapping(value = "/saveTestPdfFile", produces = {"application/json"})
+    public ResponseEntity saveTestPdfFile() {
         binaryDataRepository.saveTestPdfFile();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
