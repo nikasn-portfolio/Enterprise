@@ -24,7 +24,7 @@ public class BinaryDataService {
 
 
     public void saveTestPdfFile() {
-        InputStream fileStream = findFileStream("Employment-Contract-Agreement.pdf");
+        InputStream fileStream = findFileStream("EmployeeData.xlsx");
         Workbook wb = null;
         try {
             wb = new XSSFWorkbook(fileStream);
