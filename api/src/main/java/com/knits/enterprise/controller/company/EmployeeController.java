@@ -3,6 +3,7 @@ package com.knits.enterprise.controller.company;
 import com.knits.enterprise.dto.analytics.EmployeeAnalyticsDto;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
+import com.knits.enterprise.service.company.ContractService;
 import com.knits.enterprise.service.company.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 
 @RestController
@@ -22,8 +25,10 @@ import java.io.ByteArrayOutputStream;
 @Slf4j
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+
+    private final EmployeeService employeeService;
+
+    private final ContractService contractService;
 
     @PostMapping(value = "/employees", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<EmployeeDto> createNewEmployee(@RequestBody EmployeeDto employeeDto) {
@@ -105,6 +110,19 @@ public class EmployeeController {
     public ResponseEntity assignEmployeeToGroup(){
         EmployeeAnalyticsDto employeeAnalyticsDto = employeeService.employeeAnalytics();
         return ResponseEntity.ok().body(employeeAnalyticsDto);
+    }
+
+    @GetMapping(value = "/employees/contracts/all", produces = {"application/json"})
+    public ResponseEntity<List<Long>> findAllContracts() {
+        return ResponseEntity.ok(contractService.findContractsIds());
+    }
+    @GetMapping("/employees/contracts")
+    public ResponseEntity getEmployeeContracts(@RequestParam List<Long> ids) {
+        byte[] bytes = contractService.makeContractsZipFileByIds(ids);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", "employees.zip");
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return ResponseEntity.ok().headers(headers).body(bytes);
     }
 
 
