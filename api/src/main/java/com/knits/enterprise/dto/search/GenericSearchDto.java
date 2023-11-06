@@ -37,6 +37,8 @@ public class GenericSearchDto<T>{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Sort.Direction dir=Sort.DEFAULT_DIRECTION;
 
+
+
     @JsonIgnore
     public Specification<T> getSpecification() {
         return (root, query, criteriaBuilder) -> {
@@ -50,7 +52,6 @@ public class GenericSearchDto<T>{
     }
 
 
-
     @JsonIgnore
     public Pageable getPageable() {
         return PageRequest.of(
@@ -60,15 +61,24 @@ public class GenericSearchDto<T>{
         );
     }
 
-    @JsonIgnore
+    /*@JsonIgnore
     public Sort getSortSpec() {
         if (sort == null) return Sort.unsorted();
         return (dir != null && dir == Sort.Direction.DESC) ?
                 Sort.by(sort).descending() : Sort.by(sort).ascending();
+    }*/
+
+    @JsonIgnore
+    public Sort getSortSpec() {
+        if (sort == null) return Sort.unsorted();
+        String[] properties = sort.split(",");
+        return (dir != null && dir == Sort.Direction.DESC ? Sort.by(properties).descending() : Sort.by(properties).ascending());
     }
 
     protected void addFilters(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, List<Predicate> filters) {
         log.debug("Override this method to provide additional filters in subclasses if needed");
     }
+
+
 
 }

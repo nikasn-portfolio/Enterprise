@@ -1,6 +1,7 @@
 package com.knits.enterprise.model.company;
 
 
+import com.knits.enterprise.model.security.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

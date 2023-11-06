@@ -52,4 +52,12 @@ public class Contract implements Serializable {
             this.createdAt = LocalDateTime.now();
         }
     }
+
+    public Contract(Long id, BinaryData binaryData, Employee employee, Boolean active, LocalDateTime createdAt) {
+        this.id = id;
+        this.binaryData = binaryData;
+        this.employee = employee;
+        this.active = active;
+        this.createdAt = createdAt;
+    }
 }

@@ -6,10 +6,11 @@ import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
 import org.mapstruct.*;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {UserMapper.class})
 public interface BusinessUnitMapper extends AbstractOrganizationStructureMapper<BusinessUnit, BusinessUnitDto> {
-
 }

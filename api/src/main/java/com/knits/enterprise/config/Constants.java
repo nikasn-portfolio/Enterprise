@@ -1,5 +1,7 @@
 package com.knits.enterprise.config;
 
+import com.knits.enterprise.dto.security.UserDto;
+
 import java.time.format.DateTimeFormatter;
 
 /**
