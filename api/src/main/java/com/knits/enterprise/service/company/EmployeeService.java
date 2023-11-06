@@ -144,16 +144,6 @@ public class EmployeeService {
         employeeRepository.saveAll(employees);
     }
 
-    @Transactional
-    public EmployeeGroupResponse assignEmployeeToGroup(Long groupId, String ids) {
-        Group groupFounded = groupRepository.findByIdWithEmployees(groupId).orElseThrow(() -> new UserException("Group#" + groupId + " not found"));
-        List<Long> employeeIds = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
-        Set<Employee> employeesFounded = new LinkedHashSet<>(employeeRepository.findAllById(employeeIds));
-        groupFounded.setEmployees(employeesFounded);
-        Group savedEntity = groupRepository.save(groupFounded);
-        return null;
-    }
-
 
     @Transactional
     public EmployeeAnalyticsDto employeeAnalytics() {

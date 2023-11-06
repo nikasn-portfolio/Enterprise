@@ -3,7 +3,7 @@ package com.knits.enterprise.controller.company;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
 import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
-import com.knits.enterprise.exceptionHandlers.CustomError;
+import com.knits.enterprise.exceptionHandlers.ApiRequestValidationError;
 import com.knits.enterprise.service.company.BusinessUnitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +35,7 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
             @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                    schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
     @PostMapping(value = "/businessUnits", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<BusinessUnitDto> createNewBusinessUnit(@Valid @RequestBody BusinessUnitDto businessUnitDto) {
@@ -51,9 +51,9 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
             @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))}),
+                    schema = @Schema(implementation = ApiRequestValidationError.class))}),
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                    schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
     @PatchMapping(value = "/businessUnits", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<BusinessUnitDto> updateBusinessUnit(@RequestBody BusinessUnitDto businessUnitDto) {
@@ -69,7 +69,7 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                    schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
     @PutMapping(value = "/businessUnits/{id}", produces = {"application/json"})
     public ResponseEntity<BusinessUnitDto> deactivateBusinessUnit(@Parameter(description = "id of business unit to be deactivated") @PathVariable(value = "id") Long id) {
@@ -84,7 +84,7 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                    schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
     @DeleteMapping(value = "/businessUnits/{id}")
     public ResponseEntity<BusinessUnitDto> deleteBusinessUnit(@Parameter(description = "id of business unit to be deleted") @PathVariable(value = "id") Long id) {
@@ -99,7 +99,7 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))}),
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = CustomError.class))})
+                    schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
     @GetMapping(value = "/businessUnits/{id}", produces = {"application/json"})
     public ResponseEntity<BusinessUnitDto> getBusinessUnitById(@Parameter(description = "id of business unit to be found") @PathVariable(value = "id") Long id) {

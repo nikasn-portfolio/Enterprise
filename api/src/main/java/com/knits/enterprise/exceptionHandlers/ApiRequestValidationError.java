@@ -7,6 +7,6 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class CustomError {
+public class ApiRequestValidationError {
     List<String> errorMessages;
 }

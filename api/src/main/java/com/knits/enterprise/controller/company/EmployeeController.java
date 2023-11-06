@@ -65,7 +65,7 @@ public class EmployeeController {
                 .body(employeeFound);
     }
 
-    @GetMapping(value = "/employeeSearch", produces = {"application/json"})
+    @GetMapping(value = "/employees", produces = {"application/json"})
     public ResponseEntity<PageImpl<EmployeeDto>> searchForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
@@ -76,7 +76,7 @@ public class EmployeeController {
                 .body(foundedEmployeeDtos);
     }
 
-    @GetMapping(value = "/employeeExel", produces = {"application/json"})
+    @GetMapping(value = "/employees/export/excel", produces = {"application/json"})
     public ResponseEntity exelDocumentForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
@@ -87,7 +87,7 @@ public class EmployeeController {
         return ResponseEntity.ok().headers(headers).body(report.toByteArray());
     }
 
-    @PostMapping(value = "/employeeExel")
+    @PostMapping(value = "/employees/import/excel")
     public ResponseEntity addEmployeesFromExcelFile(@RequestParam(value = "fileName") String fileName){
         if(fileName == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -96,18 +96,8 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/addEmployeesToGroup")
-    public ResponseEntity assignEmployeeToGroup(@RequestParam(value = "groupId") Long groupId,
-                                              @RequestParam(value = "employeeIds") String employeeIds){
-        if(groupId == null || employeeIds == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        employeeService.assignEmployeeToGroup(groupId, employeeIds);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = "/employeeAnalysis", produces = {"application/json"})
-    public ResponseEntity assignEmployeeToGroup(){
+    @GetMapping(value = "/employees/analysis", produces = {"application/json"})
+    public ResponseEntity getEmployeesAnalysis(){
         EmployeeAnalyticsDto employeeAnalyticsDto = employeeService.employeeAnalytics();
         return ResponseEntity.ok().body(employeeAnalyticsDto);
     }
