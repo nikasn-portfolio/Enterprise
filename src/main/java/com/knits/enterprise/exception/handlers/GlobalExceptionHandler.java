@@ -1,6 +1,6 @@
-package com.knits.enterprise.exceptions.handlers;
+package com.knits.enterprise.exception.handlers;
 
-import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.exception.UserException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;

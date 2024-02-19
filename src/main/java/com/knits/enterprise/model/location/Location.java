@@ -19,9 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @SuperBuilder(toBuilder=true)
 @Data
 @Table(name = "location")
-public class Location extends AbstractOrganizationStructure implements Serializable {
-
-    private final static long serialVersionUID = 1L;
+public class Location extends AbstractOrganizationStructure{
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "address_id", nullable = false)

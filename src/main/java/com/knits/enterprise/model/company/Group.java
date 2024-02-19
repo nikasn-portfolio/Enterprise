@@ -16,8 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "[group]")
-public class Group extends AbstractOrganizationStructure implements Serializable {
-
+public class Group extends AbstractOrganizationStructure{
     @ManyToMany
     @JoinTable(
             name = "employees_groups",

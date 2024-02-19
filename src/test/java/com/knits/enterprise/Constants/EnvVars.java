@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EnvVars {
-    public static final String BASE_URL= System.getenv("BASE_URL");
+    public static final String BASE_URL= System.getenv("BASE_URL") == null ? "http://localhost:8080" : System.getenv("BASE_URL");
     public static final String TEST_USERNAME= "test";
     public static final String TEST_PASSWORD= "test";
 }

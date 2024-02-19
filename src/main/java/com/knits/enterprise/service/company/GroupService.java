@@ -2,7 +2,7 @@ package com.knits.enterprise.service.company;
 
 import com.knits.enterprise.dto.company.GroupDto;
 import com.knits.enterprise.dto.response.ReportResponse;
-import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.exception.UserException;
 import com.knits.enterprise.mapper.company.GroupMapper;
 import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.model.company.Group;

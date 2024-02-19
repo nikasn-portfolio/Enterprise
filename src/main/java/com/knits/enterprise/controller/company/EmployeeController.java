@@ -77,7 +77,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/employees/export/excel", produces = {"application/json"})
-    public ResponseEntity exelDocumentForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
+    public ResponseEntity excelDocumentForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
         }

@@ -14,10 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "job_title")
-public class JobTitle extends AbstractOrganizationStructure implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class JobTitle extends AbstractOrganizationStructure{
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 

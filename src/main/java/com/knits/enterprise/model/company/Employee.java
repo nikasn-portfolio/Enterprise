@@ -21,10 +21,7 @@ import java.util.Set;
 @SuperBuilder(toBuilder=true)
 @Table(name = "employee")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class Employee extends AbstractActiveEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class Employee extends AbstractActiveEntity{
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 

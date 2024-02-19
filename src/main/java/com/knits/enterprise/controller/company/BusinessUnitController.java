@@ -3,7 +3,7 @@ package com.knits.enterprise.controller.company;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
 import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
-import com.knits.enterprise.exceptions.handlers.ApiRequestValidationError;
+import com.knits.enterprise.exception.handlers.ApiRequestValidationError;
 import com.knits.enterprise.service.company.BusinessUnitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

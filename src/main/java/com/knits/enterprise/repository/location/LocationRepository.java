@@ -6,7 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LocationRepository extends ActiveEntityRepository<Location> {
-
-    Location findByName(String location);
-
 }

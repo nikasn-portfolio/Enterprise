@@ -1,10 +1,9 @@
 package com.knits.enterprise.service.company;
 
-import com.knits.enterprise.config.Constants;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
 import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
-import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.exception.UserException;
 import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.company.BusinessUnit;

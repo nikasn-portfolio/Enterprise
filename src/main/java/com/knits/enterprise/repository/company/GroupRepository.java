@@ -8,10 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface GroupRepository extends ActiveEntityRepository<Group> {
-
-    Optional<Group> findByName(String name);
-    Boolean existsByName(String name);
-
     @Query("select g from Group g left join fetch g.employees where g.id=:id")
     Optional<Group> findByIdWithEmployees (@Param("id") Long groupId);
 

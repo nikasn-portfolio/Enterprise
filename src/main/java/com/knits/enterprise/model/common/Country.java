@@ -13,10 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Data
-public class Country implements Serializable {
-
-    private final static long serialVersionUID = 9L;
-
+public class Country{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")

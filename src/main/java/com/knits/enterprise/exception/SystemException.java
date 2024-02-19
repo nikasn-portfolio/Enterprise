@@ -1,4 +1,4 @@
-package com.knits.enterprise.exceptions;
+package com.knits.enterprise.exception;
 
 public class SystemException extends AppException{
 

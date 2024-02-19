@@ -19,10 +19,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Table(name = "contract")
-public class Contract implements Serializable {
-
-    private static final long serialVersionUID = 2L;
-
+public class Contract{
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")

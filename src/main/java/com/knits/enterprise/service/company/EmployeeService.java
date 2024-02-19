@@ -6,7 +6,7 @@ import com.knits.enterprise.dto.common.*;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
 import com.knits.enterprise.dto.search.GenericSearchDto;
-import com.knits.enterprise.exceptions.UserException;
+import com.knits.enterprise.exception.UserException;
 import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.company.DepartmentMapper;
 import com.knits.enterprise.mapper.company.EmployeeMapper;
@@ -14,7 +14,6 @@ import com.knits.enterprise.mapper.company.JobTitleMapper;
 import com.knits.enterprise.mapper.location.LocationMapper;
 import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.repository.company.EmployeeRepository;
-import com.knits.enterprise.repository.company.GroupRepository;
 import com.knits.enterprise.util.excel.company.EmployeeExelUtil;
 import com.knits.enterprise.repository.projection.AgeGroupCountView;
 import lombok.AllArgsConstructor;
@@ -52,8 +51,6 @@ public class EmployeeService {
 
     private final LocationMapper locationMapper;
     private final EmployeeRepository employeeRepository;
-    private final GroupRepository groupRepository;
-
 
     @Transactional
     public EmployeeDto saveNewEmployee(EmployeeDto employeeDto) {

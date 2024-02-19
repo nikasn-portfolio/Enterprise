@@ -1,4 +1,4 @@
-package com.knits.enterprise.exceptions.handlers;
+package com.knits.enterprise.exception.handlers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

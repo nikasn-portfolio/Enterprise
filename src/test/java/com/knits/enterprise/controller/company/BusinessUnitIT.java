@@ -28,8 +28,6 @@ public class BusinessUnitIT{
 
     private static final String MOCK_NAME="MockBusinessUnitNameItest";
     private static final String MOCK_UPDATED_NAME="MockBusinessUnitNameItest-Update";
-
-    private static final String [] NAMES= {"Name1","Name2","Name3"};
     @Test
     public void testCreateBusinessUnitSuccess () throws Exception{
         String token =userTemplate.loginAndGetToken();

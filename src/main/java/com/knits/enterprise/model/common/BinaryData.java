@@ -16,10 +16,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Table(name = "files")
-public class BinaryData implements Serializable {
-
-    private static final long serialVersionUID = 2L;
-
+public class BinaryData{
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")

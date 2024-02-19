@@ -15,8 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "division")
-public class Division extends AbstractOrganizationStructure implements Serializable {
-
+public class Division extends AbstractOrganizationStructure{
     @OneToMany(mappedBy = "division")
     private List<Employee> employees;
 }
