@@ -1,17 +1,12 @@
 package com.knits.enterprise.model.security;
 
-import com.knits.enterprise.model.common.AbstractActiveEntity;
-import com.knits.enterprise.model.company.AbstractOrganizationStructure;
-import com.knits.enterprise.model.company.Group;
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Set;
 
 /**
  * A user.
@@ -21,10 +16,7 @@ import java.util.Set;
 @Data
 @SuperBuilder(toBuilder=true)
 @NoArgsConstructor
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
