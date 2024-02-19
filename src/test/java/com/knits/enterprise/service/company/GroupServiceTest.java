@@ -66,7 +66,7 @@ public class GroupServiceTest {
             long groupId = 1L;
             Set<Long> employeeIds = Set.of(1L, 2L, 3L);
             Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.shallowGroupMock(groupId)));
-            Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.empty());
+            Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.of(Set.of()));
             groupService.addEmployeeToGroup(groupId, employeeIds);
         });
     }
