@@ -15,7 +15,7 @@ import com.knits.enterprise.mapper.location.LocationMapper;
 import com.knits.enterprise.model.company.Employee;
 import com.knits.enterprise.repository.company.EmployeeRepository;
 import com.knits.enterprise.repository.company.GroupRepository;
-import com.knits.enterprise.utils.excel.company.EmployeeExelUtils;
+import com.knits.enterprise.util.excel.company.EmployeeExelUtil;
 import com.knits.enterprise.repository.projection.AgeGroupCountView;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.knits.enterprise.utils.excel.company.EmployeeExelUtils.createByteOutputStreamFromWorkbook;
-import static com.knits.enterprise.utils.excel.company.EmployeeExelUtils.findFileStream;
+import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.createByteOutputStreamFromWorkbook;
+import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileStream;
 
 
 @Service
@@ -113,7 +113,7 @@ public class EmployeeService {
         CreationHelper creationHelper = wb.getCreationHelper();
         Sheet sheet = wb.createSheet("main");
         if (listEmployeesDtos.isEmpty()) return null;
-        EmployeeExelUtils.intoExcel(sheet, listEmployeesDtos, creationHelper);
+        EmployeeExelUtil.intoExcel(sheet, listEmployeesDtos, creationHelper);
         return createByteOutputStreamFromWorkbook(wb);
     }
 
@@ -132,7 +132,7 @@ public class EmployeeService {
             }
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                Employee employee = EmployeeExelUtils.createEmployeeFromRow(row);
+                Employee employee = EmployeeExelUtil.createEmployeeFromRow(row);
                 employees.add(employee);
             }
             fis.close();

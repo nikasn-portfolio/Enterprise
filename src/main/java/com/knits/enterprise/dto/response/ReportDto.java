@@ -1,14 +1,17 @@
-package com.knits.enterprise.response;
+package com.knits.enterprise.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeGroupResponse {
+@NoArgsConstructor
+public class ReportDto {
+
     private Long id;
-    private int code;
+    private Integer code;
     private String message;
 }

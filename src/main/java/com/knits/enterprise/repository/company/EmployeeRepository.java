@@ -18,13 +18,14 @@ import org.springframework.stereotype.Repository;
 import com.knits.enterprise.model.analytics.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface EmployeeRepository extends ActiveEntityRepository<Employee> {
 
     @Query("select e from Employee  e  where e.id IN (:ids) AND e.active = true")
-    Set<Employee> findAllById(@Param("ids") Set<Long> ids);
+    Optional<Set<Employee>> findAllById(@Param("ids") Set<Long> ids);
 
     @Query("SELECT " +
             "CASE " +

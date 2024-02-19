@@ -1,4 +1,4 @@
-package com.knits.enterprise.utils.excel.company;
+package com.knits.enterprise.util.excel.company;
 
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.model.company.Employee;
@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class EmployeeExelUtils {
+public class EmployeeExelUtil {
     public static void intoExcel(Sheet sheet, List<EmployeeDto> listEmployeesDtos, CreationHelper creationHelper) {
         setWidthOfColumns(sheet);
         initEmployeeExcelHeaders(sheet,creationHelper);

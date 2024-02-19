@@ -3,7 +3,7 @@ package com.knits.enterprise.controller.company;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.knits.enterprise.dto.common.PaginatedResponseDto;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
-import com.knits.enterprise.model.BusinessUnitDtoMock;
+import com.knits.enterprise.dto.BusinessUnitDtoMock;
 import com.knits.enterprise.template.BusinessUnitTemplate;
 import com.knits.enterprise.template.UserTemplate;
 import com.knits.enterprise.utils.TestConsts;

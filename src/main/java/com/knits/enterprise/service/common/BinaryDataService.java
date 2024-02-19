@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 
-import static com.knits.enterprise.utils.excel.company.EmployeeExelUtils.findFileStream;
+import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileStream;
 
 @Service
 @AllArgsConstructor

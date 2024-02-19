@@ -1,4 +1,4 @@
-package com.knits.enterprise.model;
+package com.knits.enterprise.dto;
 
 import com.knits.enterprise.config.Constants;
 import com.knits.enterprise.dto.company.BusinessUnitDto;
