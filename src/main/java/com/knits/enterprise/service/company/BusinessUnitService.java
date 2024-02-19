@@ -19,9 +19,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Transactional
 @Slf4j
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class BusinessUnitService {
     private final BusinessUnitRepository businessUnitRepository;
 
@@ -55,7 +55,7 @@ public class BusinessUnitService {
         return businessUnitMapper.toDto(businessUnit);
     }
 
-    @Transactional
+
     public BusinessUnitDto findBusinessUnitById(Long id) {
         BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
         return businessUnitMapper.toDto(businessUnit);
@@ -70,8 +70,6 @@ public class BusinessUnitService {
                 .orElseThrow((() -> new UserException("BusinessUnit#" + id + " not found")));
         businessUnitRepository.deleteBusinessUnitById(businessUnit.getId());
     }
-
-    @Transactional
     public PaginatedResponseDto<BusinessUnitDto> search(BusinessUnitSearchDto searchDto) {
 
         Page<BusinessUnit> businessUnitPages = businessUnitRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());

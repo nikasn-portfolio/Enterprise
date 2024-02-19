@@ -2,7 +2,6 @@ package com.knits.enterprise.repository.company;
 
 import com.knits.enterprise.model.company.JobTitle;
 import com.knits.enterprise.repository.common.ActiveEntityRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository

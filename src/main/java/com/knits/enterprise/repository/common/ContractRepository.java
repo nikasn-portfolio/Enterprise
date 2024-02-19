@@ -1,6 +1,5 @@
 package com.knits.enterprise.repository.common;
 
-import com.knits.enterprise.model.common.BinaryData;
 import com.knits.enterprise.model.company.Contract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
