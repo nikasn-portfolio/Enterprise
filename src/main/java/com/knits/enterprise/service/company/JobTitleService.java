@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 @AllArgsConstructor
 public class JobTitleService {
@@ -28,6 +28,7 @@ public class JobTitleService {
         return jobTitleMapper.toDto(savedJobTitle);
     }
 
+    @Transactional
     public JobTitleDto deactivateJobTitle(Long jobTitleId) {
 
         JobTitle deactivateJobTitle = jobTitleRepository.findById(jobTitleId).orElse(null);

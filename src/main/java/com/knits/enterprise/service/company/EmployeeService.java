@@ -36,7 +36,7 @@ import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileS
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 @AllArgsConstructor
 public class EmployeeService {
@@ -59,7 +59,6 @@ public class EmployeeService {
         return employeeMapper.toDto(savedEmployee);
     }
 
-    @Transactional
     public EmployeeDto findEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new UserException("User#" + id + " not found"));
         return employeeMapper.toDto(employee);

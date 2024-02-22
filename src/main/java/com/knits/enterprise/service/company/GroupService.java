@@ -11,6 +11,7 @@ import com.knits.enterprise.repository.company.GroupRepository;
 import com.knits.enterprise.util.excel.company.GroupUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class GroupService {
     private final GroupRepository groupRepository;
 
