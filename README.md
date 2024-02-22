@@ -10,6 +10,9 @@ BusinessUnits and their Employees.
 • Maven <br>
 • Spring Boot <br>
 
+# Additional Requirements
+• Change path of contracts failed logs to be stored in the `ContractService` in method `generateFileOfReport()` <br>
+
 ## Run the app
 
     mnv clean package
