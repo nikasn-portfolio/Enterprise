@@ -1,1 +1,0 @@
-update employee set active=true;
