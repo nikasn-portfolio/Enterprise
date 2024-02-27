@@ -23,13 +23,11 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/business-unit-service/business-units")
 @Slf4j
 public class BusinessUnitController {
     @Autowired
     private BusinessUnitService businessUnitService;
-
-    private static final String ENDPOINT_NAME = "/business-units";
 
     @Operation(summary = "Creates business unit")
     @ApiResponses(value = {
@@ -39,7 +37,7 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "400", description = "Requested body is invalid", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
-    @PostMapping(value = ENDPOINT_NAME, produces = {"application/json"}, consumes = {"application/json"})
+    @PostMapping(produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<BusinessUnitDto> createNewBusinessUnit(@Valid @RequestBody BusinessUnitDto businessUnitDto) {
         log.debug("REST request to create BusinessUnit");
         return ResponseEntity
@@ -57,7 +55,7 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
-    @PatchMapping(value = ENDPOINT_NAME, produces = {"application/json"}, consumes = {"application/json"})
+    @PatchMapping(produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<BusinessUnitDto> updateBusinessUnit(@RequestBody BusinessUnitDto businessUnitDto) {
         BusinessUnitDto businessUnitFound = businessUnitService.partialUpdate(businessUnitDto);
         return ResponseEntity
@@ -73,7 +71,7 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
-    @PutMapping(value = ENDPOINT_NAME + "/{id}", produces = {"application/json"})
+    @PutMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<BusinessUnitDto> deactivateBusinessUnit(@Parameter(description = "id of business unit to be deactivated") @PathVariable(value = "id") Long id) {
         businessUnitService.deactivateBusinessUnit(id);
         return ResponseEntity
@@ -88,7 +86,7 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
-    @DeleteMapping(value = ENDPOINT_NAME + "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<BusinessUnitDto> deleteBusinessUnit(@Parameter(description = "id of business unit to be deleted") @PathVariable(value = "id") Long id) {
         businessUnitService.deleteBusinessUnit(id);
         return ResponseEntity
@@ -103,7 +101,7 @@ public class BusinessUnitController {
             @ApiResponse(responseCode = "404", description = "Business unit is not found", content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ApiRequestValidationError.class))})
     })
-    @GetMapping(value = ENDPOINT_NAME + "/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<BusinessUnitDto> getBusinessUnitById(@Parameter(description = "id of business unit to be found") @PathVariable(value = "id") Long id) {
         return ResponseEntity
                 .ok()
@@ -116,7 +114,7 @@ public class BusinessUnitController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = BusinessUnitDto.class))})
     })
-    @GetMapping(value = ENDPOINT_NAME, produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     public PaginatedResponseDto<BusinessUnitDto> getPaginatedContent(@Parameter (description = "page number (optional)") @RequestParam(value = "page", required = false) Integer page,
                                                                      @Parameter (description = "size of content (optional)") @RequestParam(value = "limit", required = false) Integer limit,
                                                                      @Parameter (description = "sort parameters separated by comma (optional)") @RequestParam(value = "sort", required = false) String sort,

@@ -47,7 +47,7 @@ public class BusinessUnitTemplate extends EndpointTemplate {
 
     @Override
     protected String getEndpoint() {
-        return "api/businessUnits";
+        return "api/business-unit-service/business-units";
     }
 
 
