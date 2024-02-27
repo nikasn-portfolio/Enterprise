@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @Slf4j
 @AllArgsConstructor
 public class JobTitleService {
@@ -20,15 +20,12 @@ public class JobTitleService {
     private final JobTitleMapper jobTitleMapper;
     private final JobTitleRepository jobTitleRepository;
 
-    @Transactional
     public JobTitleDto saveNewJobTitle(JobTitleDto jobTitleDto) {
         JobTitle jobTitle = jobTitleMapper.toEntity(jobTitleDto);
         jobTitle.setStartDate(LocalDateTime.now());
         JobTitle savedJobTitle = jobTitleRepository.save(jobTitle);
         return jobTitleMapper.toDto(savedJobTitle);
     }
-
-    @Transactional
     public JobTitleDto deactivateJobTitle(Long jobTitleId) {
 
         JobTitle deactivateJobTitle = jobTitleRepository.findById(jobTitleId).orElse(null);
