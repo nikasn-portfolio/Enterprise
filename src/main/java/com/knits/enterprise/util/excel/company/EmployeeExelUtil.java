@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.ExcelEmployeeTitleKey.*;
+
 public class EmployeeExelUtil {
     public static void fillExcelTableWithEmployeesData(Sheet sheet, List<EmployeeDto> listEmployeesDtos, CreationHelper creationHelper) {
         setWidthOfColumns(sheet);
@@ -43,22 +45,22 @@ public class EmployeeExelUtil {
     }
     public static void initEmployeeExcelHeaders(Sheet sheet, CreationHelper creationHelper) {
         Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.FIRST_NAME_KEY));
-        row.createCell(1).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.LAST_NAME_KEY));
-        row.createCell(2).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.EMAIL_KEY));
-        row.createCell(3).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.BIRTH_DATE_KEY));
-        row.createCell(4).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.GENDER_KEY));
-        row.createCell(5).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.START_DATE_KEY));
-        row.createCell(6).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.END_DATE_KEY));
-        row.createCell(7).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.COMPANY_PHONE_KEY));
-        row.createCell(8).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.ROLE_KEY));
-        row.createCell(9).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.BUSINESS_UNIT_KEY));
-        row.createCell(10).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.ORGANIZATION_KEY));
-        row.createCell(11).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.OFFICE_KEY));
-        row.createCell(12).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.JOB_TITLE_KEY));
-        row.createCell(13).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.DEPARTMENT_KEY));
-        row.createCell(14).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.DIVISION_KEY));
-        row.createCell(15).setCellValue(creationHelper.createRichTextString(ExcelEmployeeTitleKey.SOLID_LINE_MANAGER_KEY));
+        row.createCell(0).setCellValue(creationHelper.createRichTextString(FIRST_NAME_KEY));
+        row.createCell(1).setCellValue(creationHelper.createRichTextString(LAST_NAME_KEY));
+        row.createCell(2).setCellValue(creationHelper.createRichTextString(EMAIL_KEY));
+        row.createCell(3).setCellValue(creationHelper.createRichTextString(BIRTH_DATE_KEY));
+        row.createCell(4).setCellValue(creationHelper.createRichTextString(GENDER_KEY));
+        row.createCell(5).setCellValue(creationHelper.createRichTextString(START_DATE_KEY));
+        row.createCell(6).setCellValue(creationHelper.createRichTextString(END_DATE_KEY));
+        row.createCell(7).setCellValue(creationHelper.createRichTextString(COMPANY_PHONE_KEY));
+        row.createCell(8).setCellValue(creationHelper.createRichTextString(ROLE_KEY));
+        row.createCell(9).setCellValue(creationHelper.createRichTextString(BUSINESS_UNIT_KEY));
+        row.createCell(10).setCellValue(creationHelper.createRichTextString(ORGANIZATION_KEY));
+        row.createCell(11).setCellValue(creationHelper.createRichTextString(OFFICE_KEY));
+        row.createCell(12).setCellValue(creationHelper.createRichTextString(JOB_TITLE_KEY));
+        row.createCell(13).setCellValue(creationHelper.createRichTextString(DEPARTMENT_KEY));
+        row.createCell(14).setCellValue(creationHelper.createRichTextString(DIVISION_KEY));
+        row.createCell(15).setCellValue(creationHelper.createRichTextString(SOLID_LINE_MANAGER_KEY));
     }
 
     public static void setWidthOfColumns(Sheet sheet){
@@ -109,26 +111,26 @@ public class EmployeeExelUtil {
         }
         return bos;
     }
-    public static class ExcelEmployeeTitleKey{
-        private static final String FIRST_NAME_KEY = "firstName";
-        private static final String LAST_NAME_KEY = "lastName";
-        private static final String EMAIL_KEY = "email";
-        private static final String BIRTH_DATE_KEY = "birthDate";
-        private static final String GENDER_KEY = "gender";
+    protected static class ExcelEmployeeTitleKey{
+        protected static final String FIRST_NAME_KEY = "firstName";
+        protected static final String LAST_NAME_KEY = "lastName";
+        protected static final String EMAIL_KEY = "email";
+        protected static final String BIRTH_DATE_KEY = "birthDate";
+        protected static final String GENDER_KEY = "gender";
 
-        private static final String START_DATE_KEY = "startDate";
-        private static final String END_DATE_KEY = "endDate";
+        protected static final String START_DATE_KEY = "startDate";
+        protected static final String END_DATE_KEY = "endDate";
 
-        private static final String COMPANY_PHONE_KEY = "companyPhone";
+        protected static final String COMPANY_PHONE_KEY = "companyPhone";
 
-        private static final String ROLE_KEY = "role";
-        private static final String BUSINESS_UNIT_KEY = "businessUnit";
+        protected static final String ROLE_KEY = "role";
+        protected static final String BUSINESS_UNIT_KEY = "businessUnit";
 
-        private static final String ORGANIZATION_KEY = "organization";
-        private static final String OFFICE_KEY = "office";
-        private static final String JOB_TITLE_KEY = "jobTitle";
-        private static final String DEPARTMENT_KEY = "department";
-        private static final String DIVISION_KEY = "division";
-        private static final String SOLID_LINE_MANAGER_KEY = "solidLineManager";
+        protected static final String ORGANIZATION_KEY = "organization";
+        protected static final String OFFICE_KEY = "office";
+        protected static final String JOB_TITLE_KEY = "jobTitle";
+        protected static final String DEPARTMENT_KEY = "department";
+        protected static final String DIVISION_KEY = "division";
+        protected static final String SOLID_LINE_MANAGER_KEY = "solidLineManager";
     }
 }
