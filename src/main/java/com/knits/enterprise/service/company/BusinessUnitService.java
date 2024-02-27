@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 @Slf4j
 @AllArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class BusinessUnitService {
     private final BusinessUnitRepository businessUnitRepository;
 
@@ -30,7 +30,6 @@ public class BusinessUnitService {
 
     private final UserService userService;
 
-    @Transactional
     public BusinessUnitDto saveNewBusinessUnit(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitMapper.toEntity(businessUnitDto);
         businessUnit.setActive(true);
@@ -39,29 +38,22 @@ public class BusinessUnitService {
         BusinessUnit savedBusinessUnit = businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(savedBusinessUnit);
     }
-
-    @Transactional
     public BusinessUnitDto partialUpdate(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitRepository.findById(businessUnitDto.getId()).orElseThrow(() -> new UserException("BusinessUnit#" + businessUnitDto.getId() + " not found"));
         businessUnitMapper.partialUpdate(businessUnit, businessUnitDto);
         businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(businessUnit);
     }
-
-    @Transactional
     public BusinessUnitDto deactivateBusinessUnit(Long id) {
         BusinessUnit businessUnit = businessUnitRepository.findById(id).get();
         businessUnitRepository.delete(businessUnit);
         return businessUnitMapper.toDto(businessUnit);
     }
-
-
+    @Transactional(readOnly = true)
     public BusinessUnitDto findBusinessUnitById(Long id) {
         BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
         return businessUnitMapper.toDto(businessUnit);
     }
-
-    @Transactional
     public void deleteBusinessUnit(Long id) {
         List<BusinessUnit> allBusinessUnits = businessUnitRepository.findAllBusinessUnits();
         BusinessUnit businessUnit = allBusinessUnits.stream()
@@ -70,6 +62,7 @@ public class BusinessUnitService {
                 .orElseThrow((() -> new UserException("BusinessUnit#" + id + " not found")));
         businessUnitRepository.deleteBusinessUnitById(businessUnit.getId());
     }
+    @Transactional(readOnly = true)
     public PaginatedResponseDto<BusinessUnitDto> search(BusinessUnitSearchDto searchDto) {
 
         Page<BusinessUnit> businessUnitPages = businessUnitRepository.findAll(searchDto.getSpecification(),searchDto.getPageable());
