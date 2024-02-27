@@ -111,12 +111,13 @@ public class EmployeeController {
         return ResponseEntity.ok(contractService.findContractsIds());
     }
     @GetMapping("/contracts/zip")
-    public ResponseEntity getEmployeeContracts(@RequestParam List<Long> ids) {
+    public ResponseEntity<Resource> getEmployeeContracts(@RequestParam List<Long> ids) {
         byte[] bytes = contractService.makeContractsZipFileByIds(ids);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDispositionFormData("attachment", "employees.zip");
         headers.setContentType(APPLICATION_OCTET_STREAM);
-        return ResponseEntity.ok().headers(headers).body(bytes);
+        ByteArrayResource resource = new ByteArrayResource(bytes);
+        return ResponseEntity.ok().headers(headers).body(resource);
     }
 
 
