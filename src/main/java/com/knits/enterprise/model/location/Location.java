@@ -1,7 +1,7 @@
 package com.knits.enterprise.model.location;
 
 import com.knits.enterprise.model.common.Address;
-import com.knits.enterprise.model.company.AbstractOrganizationStructure;
+import com.knits.enterprise.model.company.OrganizationalEntity;
 import com.knits.enterprise.model.enums.LocationUsageType;
 import com.knits.enterprise.model.enums.OwnershipType;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import static javax.persistence.FetchType.LAZY;
 @SuperBuilder(toBuilder=true)
 @Data
 @Table(name = "location")
-public class Location extends AbstractOrganizationStructure{
+public class Location extends OrganizationalEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "address_id", nullable = false)

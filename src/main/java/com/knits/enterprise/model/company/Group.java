@@ -1,7 +1,6 @@
 package com.knits.enterprise.model.company;
 
 
-import com.knits.enterprise.model.security.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "[group]")
-public class Group extends AbstractOrganizationStructure{
+public class Group extends OrganizationalEntity {
     @ManyToMany
     @JoinTable(
             name = "employees_groups",

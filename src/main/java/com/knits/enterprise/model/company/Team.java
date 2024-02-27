@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "team")
-public class Team extends AbstractOrganizationStructure{
+public class Team extends OrganizationalEntity {
     @OneToMany(mappedBy = "team")
     private List<Employee> employees;
 }

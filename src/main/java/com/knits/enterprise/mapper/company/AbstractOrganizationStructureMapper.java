@@ -6,7 +6,7 @@ import com.knits.enterprise.mapper.common.EntityMapper;
 import com.knits.enterprise.model.company.*;
 import org.mapstruct.*;
 
-public interface AbstractOrganizationStructureMapper<E extends AbstractOrganizationStructure, D extends AbstractOrganizationStructureDto> extends  EntityMapper<E,D>{
+public interface AbstractOrganizationStructureMapper<E extends OrganizationalEntity, D extends AbstractOrganizationStructureDto> extends  EntityMapper<E,D>{
 
     @Mapping(source = "startDate", target = "startDate", dateFormat = Constants.TIME_FORMAT_DD_MM_YYYY_HH_MM_SS)
     @Mapping(source = "endDate", target = "endDate", dateFormat = Constants.TIME_FORMAT_DD_MM_YYYY_HH_MM_SS,nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)

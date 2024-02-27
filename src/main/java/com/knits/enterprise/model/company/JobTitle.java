@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "job_title")
-public class JobTitle extends AbstractOrganizationStructure{
+public class JobTitle extends OrganizationalEntity {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 

@@ -12,12 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 public class Contact extends AbstractActiveEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
     @Column(nullable = false)
     private String firstName;
 

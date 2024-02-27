@@ -1,6 +1,6 @@
 package com.knits.enterprise.model.common;
 
-import com.knits.enterprise.model.company.AbstractOrganizationStructure;
+import com.knits.enterprise.model.company.OrganizationalEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
 @Table(name = "organization")
-public class Organization extends AbstractOrganizationStructure {
+public class Organization extends OrganizationalEntity {
 
     @Column
     private String alias;
