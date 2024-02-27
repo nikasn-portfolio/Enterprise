@@ -39,7 +39,7 @@ public class GroupServiceTest {
     public void testAddEmployeeToExistingGroup() {
         long groupId = 1L;
         Set<Long> employeeIds = Set.of(1L, 2L, 3L);
-        Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.shallowGroupMock(groupId)));
+        Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.mockGroup(groupId)));
         Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.of(EmployeeMock.mockSetOfEmployees(3)));
         ReportResponse<GroupDto> groupDtoReportResponse = groupService.addEmployeeToGroup(groupId, employeeIds);
         Mockito.verify(groupRepository, Mockito.times(1)).findByIdWithEmployees(groupId);
@@ -65,7 +65,7 @@ public class GroupServiceTest {
         assertThrows(UserException.class, () -> {
             long groupId = 1L;
             Set<Long> employeeIds = Set.of(1L, 2L, 3L);
-            Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.shallowGroupMock(groupId)));
+            Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.mockGroup(groupId)));
             Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.of(Set.of()));
             groupService.addEmployeeToGroup(groupId, employeeIds);
         });
