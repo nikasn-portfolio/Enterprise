@@ -1,6 +1,6 @@
 package com.knits.enterprise.model.company;
 
-import com.knits.enterprise.model.common.BinaryData;
+import com.knits.enterprise.model.common.MediaFile;
 import com.knits.enterprise.model.security.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ public class Contract{
 
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "binary_id")
-    private BinaryData binaryData;
+    private MediaFile mediaFile;
 
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn (name = "creator_id")
@@ -49,9 +49,9 @@ public class Contract{
         }
     }
 
-    public Contract(Long id, BinaryData binaryData, Employee employee, Boolean active, LocalDateTime createdAt) {
+    public Contract(Long id, MediaFile mediaFile, Employee employee, Boolean active, LocalDateTime createdAt) {
         this.id = id;
-        this.binaryData = binaryData;
+        this.mediaFile = mediaFile;
         this.employee = employee;
         this.active = active;
         this.createdAt = createdAt;

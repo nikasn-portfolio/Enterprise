@@ -1,7 +1,7 @@
 package com.knits.enterprise.service.common;
 
-import com.knits.enterprise.model.common.BinaryData;
-import com.knits.enterprise.repository.common.BinaryDataRepository;
+import com.knits.enterprise.model.common.MediaFile;
+import com.knits.enterprise.repository.common.MediaFileRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileS
 @AllArgsConstructor
 @Transactional
 @Slf4j
-public class BinaryDataService {
+public class MediaFileService {
 
-    private final BinaryDataRepository binaryDataRepository;
+    private final MediaFileRepository mediaFileRepository;
 
 
     public void saveTestPdfFile() {
@@ -25,11 +25,11 @@ public class BinaryDataService {
         try {
             byte[] buffer = new byte[fileStream.available()];
             int bytesRead = fileStream.read(buffer);
-            BinaryData data = BinaryData.builder().title("test")
+            MediaFile data = MediaFile.builder().title("test")
                     .contentType("application/pdf")
                     .bytes(buffer)
                     .size(Long.valueOf(buffer.length)).build();
-            binaryDataRepository.save(data);
+            mediaFileRepository.save(data);
         }catch (Exception e){
             throw new RuntimeException(e);
         }

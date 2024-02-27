@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Builder
 @Table(name = "files")
-public class BinaryData{
+public class MediaFile {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")

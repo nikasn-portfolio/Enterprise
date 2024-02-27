@@ -28,10 +28,10 @@ public class ContractService {
             Contract contract = contractRepository.findById(ids.get(i)).orElse(null);
             if (contract != null) {
                 ZipEntry entry = new ZipEntry("contract-" + ids.get(i) + "#id.pdf");
-                entry.setSize(contract.getBinaryData().getSize());
+                entry.setSize(contract.getMediaFile().getSize());
                 try {
                     zos.putNextEntry(entry);
-                    zos.write(contract.getBinaryData().getBytes());
+                    zos.write(contract.getMediaFile().getBytes());
                     zos.closeEntry();
                 } catch (Exception e) {
                     throw new RuntimeException("Error while creating zip file", e);

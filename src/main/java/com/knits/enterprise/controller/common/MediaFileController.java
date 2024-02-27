@@ -1,6 +1,6 @@
 package com.knits.enterprise.controller.common;
 
-import com.knits.enterprise.service.common.BinaryDataService;
+import com.knits.enterprise.service.common.MediaFileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/common/binary-data")
-public class BinaryDataController {
-    private final BinaryDataService binaryDataRepository;
+@RequestMapping("/api")
+public class MediaFileController {
+    private final MediaFileService mediaFileService;
 
-    @PostMapping(value = "/save-test-pdf-file", produces = {"application/json"})
+    @PostMapping(value = "/media-file-service/media-files/test-file", produces = {"application/json"})
     public ResponseEntity saveTestPdfFile() {
-        binaryDataRepository.saveTestPdfFile();
+        mediaFileService.saveTestPdfFile();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
