@@ -18,6 +18,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
     List<Long> findAllIds();
 
     @Transactional
-    @Query("select new com.knits.enterprise.model.company.Contract(c.id, c.binaryData, c.employee, c.active, c.createdAt) from Contract c where c.id = :id")
+    @Query("select new com.knits.enterprise.model.company.Contract(c.id, c.mediaFile, c.employee, c.active, c.createdAt) from Contract c where c.id = :id")
     Optional<Contract> findById(Long id);
 }
