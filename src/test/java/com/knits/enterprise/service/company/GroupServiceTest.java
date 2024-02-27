@@ -40,7 +40,7 @@ public class GroupServiceTest {
         long groupId = 1L;
         Set<Long> employeeIds = Set.of(1L, 2L, 3L);
         Mockito.when(groupRepository.findByIdWithEmployees(groupId)).thenReturn(Optional.of(GroupMock.shallowGroupMock(groupId)));
-        Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.of(EmployeeMock.shallowSetOfEmployees(3)));
+        Mockito.when(employeeRepository.findAllById(employeeIds)).thenReturn(Optional.of(EmployeeMock.mockSetOfEmployees(3)));
         ReportResponse<GroupDto> groupDtoReportResponse = groupService.addEmployeeToGroup(groupId, employeeIds);
         Mockito.verify(groupRepository, Mockito.times(1)).findByIdWithEmployees(groupId);
         Mockito.verify(employeeRepository, Mockito.times(1)).findAllById(employeeIds);

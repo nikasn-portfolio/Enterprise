@@ -3,12 +3,11 @@ package com.knits.enterprise.model;
 import com.knits.enterprise.model.company.Employee;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class EmployeeMock {
-    public static Employee shallowEmployee(long id) {
+    public static Employee mockEmployee(long id) {
         return Employee.builder()
                 .id(id)
                 .firstName("Mock name")
@@ -20,10 +19,10 @@ public class EmployeeMock {
                 .companyMobileNumber("Mock mobile")
                 .build();
     }
-    public static Set<Employee> shallowSetOfEmployees(int size) {
+    public static Set<Employee> mockSetOfEmployees(int size) {
         Set<Employee> employees = new HashSet<>();
         for (int i = 1; i <= size; i++) {
-            employees.add(shallowEmployee(Long.valueOf(i)));
+            employees.add(mockEmployee(Long.valueOf(i)));
         }
         return employees;
     }
