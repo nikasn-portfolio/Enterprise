@@ -101,7 +101,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/analysis", produces = {"application/json"})
-    public ResponseEntity getEmployeesAnalysis(){
+    public ResponseEntity<EmployeeAnalyticsDto> getEmployeesAnalysis(){
         EmployeeAnalyticsDto employeeAnalyticsDto = employeeService.employeeAnalytics();
         return ResponseEntity.ok().body(employeeAnalyticsDto);
     }
