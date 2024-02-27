@@ -22,7 +22,9 @@ public class EmployeeMock {
     public static Set<Employee> mockSetOfEmployees(int size) {
         Set<Employee> employees = new HashSet<>();
         for (int i = 1; i <= size; i++) {
-            employees.add(mockEmployee(Long.valueOf(i)));
+            Employee employee = mockEmployee(Long.valueOf(i));
+            employee.setEmail("mock" + i + "@mock.com");
+            employees.add(employee);
         }
         return employees;
     }
