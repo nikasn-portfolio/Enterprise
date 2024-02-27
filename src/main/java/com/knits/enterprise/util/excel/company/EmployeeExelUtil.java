@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class EmployeeExelUtil {
-    public static void intoExcel(Sheet sheet, List<EmployeeDto> listEmployeesDtos, CreationHelper creationHelper) {
+    public static void fillExcelTableWithEmployeesData(Sheet sheet, List<EmployeeDto> listEmployeesDtos, CreationHelper creationHelper) {
         setWidthOfColumns(sheet);
         initEmployeeExcelHeaders(sheet,creationHelper);
         for (int i = 0; i < listEmployeesDtos.size(); i++) {

@@ -2,10 +2,8 @@ package com.knits.enterprise.service.company;
 
 
 import com.knits.enterprise.dto.analytics.*;
-import com.knits.enterprise.dto.common.*;
 import com.knits.enterprise.dto.company.EmployeeDto;
 import com.knits.enterprise.dto.search.EmployeeSearchDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.exception.UserException;
 import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.company.DepartmentMapper;
@@ -91,7 +89,7 @@ public class EmployeeService {
         CreationHelper creationHelper = wb.getCreationHelper();
         Sheet sheet = wb.createSheet("main");
         if (listEmployeesDtos.isEmpty()) return null;
-        EmployeeExelUtil.intoExcel(sheet, listEmployeesDtos, creationHelper);
+        EmployeeExelUtil.fillExcelTableWithEmployeesData(sheet, listEmployeesDtos, creationHelper);
         return createByteOutputStreamFromWorkbook(wb);
     }
 
