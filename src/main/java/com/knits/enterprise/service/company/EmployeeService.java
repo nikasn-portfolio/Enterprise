@@ -36,7 +36,7 @@ import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileS
 
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @Slf4j
 @AllArgsConstructor
 public class EmployeeService {
@@ -52,19 +52,17 @@ public class EmployeeService {
     private final LocationMapper locationMapper;
     private final EmployeeRepository employeeRepository;
 
-    @Transactional
     public EmployeeDto saveNewEmployee(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.toEntity(employeeDto);
         Employee savedEmployee = employeeRepository.save(employee);
         return employeeMapper.toDto(savedEmployee);
     }
-
+    @Transactional(readOnly = true)
     public EmployeeDto findEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new UserException("User#" + id + " not found"));
         return employeeMapper.toDto(employee);
     }
 
-    @Transactional
     public EmployeeDto partialUpdate(EmployeeDto employeeDto) {
         Employee employee = employeeRepository.findById(employeeDto.getId()).orElseThrow(() -> new UserException("User#" + employeeDto.getId() + " not found"));
 
@@ -73,35 +71,19 @@ public class EmployeeService {
         return employeeMapper.toDto(employee);
     }
 
-    @Transactional
     public EmployeeDto deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id).get();
         employeeRepository.delete(employee);
         return employeeMapper.toDto(employee);
 
     }
-
-
-    public PaginatedResponseDto<EmployeeDto> listAll(GenericSearchDto<Employee> searchDto) {
-
-        Page<Employee> employeesPage = employeeRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
-        List<EmployeeDto> employeeDtos = employeeMapper.toDtos(employeesPage.getContent());
-
-        return PaginatedResponseDto.<EmployeeDto>builder()
-                .page(searchDto.getPage())
-                .size(employeeDtos.size())
-                .sortingFields(searchDto.getSort())
-                .sortDirection(searchDto.getDir().name())
-                .data(employeeDtos)
-                .build();
-    }
-
+    @Transactional(readOnly = true)
     public PageImpl<EmployeeDto> searchForEmployees(EmployeeSearchDto searchDto) {
         Page<Employee> foundEmployees = employeeRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
         List<EmployeeDto> listEmployeesDtos = employeeMapper.toDtos(foundEmployees.getContent());
         return new PageImpl<>(listEmployeesDtos, searchDto.getPageable(), foundEmployees.getTotalElements());
     }
-
+    @Transactional(readOnly = true)
     public ByteArrayOutputStream makeExelOfEmployees(EmployeeSearchDto searchDto) {
         Page<Employee> foundEmployees = employeeRepository.findAll(searchDto.getSpecification(), searchDto.getPageable());
         List<EmployeeDto> listEmployeesDtos = employeeMapper.toDtos(foundEmployees.getContent());
@@ -137,9 +119,7 @@ public class EmployeeService {
         }
         employeeRepository.saveAll(employees);
     }
-
-
-    @Transactional
+    @Transactional(readOnly = true)
     public EmployeeAnalyticsDto employeeAnalytics() {
         List<AgeGroupCountView> ageGroupCountViews = employeeRepository.countEmployeesByAgeGroup();
 
@@ -204,7 +184,7 @@ public class EmployeeService {
                 .employeesCountInDepartmentDto(bestEmployeesCountInDepartment)
                 .build();
     }
-
+    @Transactional(readOnly = true)
     public void makeListOfTotalEmployeesCountPerYear(List<EmployeesTotalCountByYearDto> employeesTotalCountByYearDtoList, List<EmployeesHiredCountByYearDto> employeesHiredCountByYearDtosList, List<EmployeesLeftCountByYearDto> employeesLeftCountByYearDtosList){
         for (EmployeesHiredCountByYearDto employeesHiredCountByYearDto : employeesHiredCountByYearDtosList) {
             String currentYear = employeesHiredCountByYearDto.getYear();
