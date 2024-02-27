@@ -34,7 +34,7 @@ public class BusinessUnitService {
         BusinessUnit businessUnit = businessUnitMapper.toEntity(businessUnitDto);
         businessUnit.setActive(true);
         businessUnit.setStartDate(LocalDateTime.now());
-        businessUnit.setCreatedBy(userMapper.toEntity(userService.getCurrentUser()));
+        businessUnit.setCreatedBy(userMapper.toEntity(userService.getHardCodedCurrentUserDto()));
         BusinessUnit savedBusinessUnit = businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(savedBusinessUnit);
     }

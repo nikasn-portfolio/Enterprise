@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserService {
-    public UserDto getCurrentUser() {
+    public UserDto getHardCodedCurrentUserDto() {
         return UserDto.builder()
                 .id(1L)
                 .firstName("mock-admin")
