@@ -19,7 +19,7 @@ public class GroupUtil {
         });
         return reportResponse;
     }
-    public static class Constants {
+    private static class Constants {
         public static final String EMPLOYEE_ALREADY_IN_GROUP_MESSAGE = "Employee already in group";
         public static final String EMPLOYEE_NOT_FOUND_MESSAGE = "Employee not found";
         public static final String EMPLOYEE_ADDED_TO_GROUP_MESSAGE = "Employee added to group";
