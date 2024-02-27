@@ -37,7 +37,7 @@ public class ContractService {
                     throw new RuntimeException("Error while creating zip file", e);
                 }
             } else {
-                String reportFileGeneratedPath = generateFileOfReport(ids.get(i));
+                String reportFileGeneratedPath = generateFileOfContractFailedReport(ids.get(i));
                 byte[] dataForWriting = readFileToByteArray(reportFileGeneratedPath);
                 ZipEntry entry = new ZipEntry("contract-" + ids.get(i) + "#id.txt");
                 entry.setSize(Long.valueOf(dataForWriting.length));
@@ -68,7 +68,7 @@ public class ContractService {
         }
     }
 
-    public String generateFileOfReport(Long id) {
+    public String generateFileOfContractFailedReport(Long id) {
         String path = System.getProperty("user.home") + "/Desktop/contractreports";
         File folder = new File(path);
         if (!folder.exists()) {
