@@ -12,7 +12,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Service
-@Transactional(readOnly = true)
 @AllArgsConstructor
 public class ContractService {
     private final ContractRepository contractRepository;
@@ -20,7 +19,7 @@ public class ContractService {
     public List<Long> findContractsIds() {
         return contractRepository.findAllIds();
     }
-
+    @Transactional(readOnly = true)
     public byte[] makeContractsZipFileByIds(List<Long> ids) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
