@@ -15,14 +15,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Data
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
-public abstract class OrganizationalEntity{
-    @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @Column(name = "active", columnDefinition = "boolean default true")
-    private boolean active;
+public abstract class OrganizationalEntity extends AbstractActiveEntity{
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
