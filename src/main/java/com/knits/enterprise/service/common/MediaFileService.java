@@ -13,13 +13,10 @@ import static com.knits.enterprise.util.excel.company.EmployeeExelUtil.findFileS
 
 @Service
 @AllArgsConstructor
-@Transactional
 @Slf4j
 public class MediaFileService {
-
     private final MediaFileRepository mediaFileRepository;
-
-
+    @Transactional
     public void saveTestPdfFile() {
         InputStream fileStream = findFileStream("Employment-Contract-Agreement.pdf");
         try {
@@ -33,7 +30,5 @@ public class MediaFileService {
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-
     }
-
 }

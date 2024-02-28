@@ -1,15 +1,9 @@
-package com.knits.enterprise.service.security;
+package com.knits.enterprise.util.excel.company;
 
 import com.knits.enterprise.dto.security.UserDto;
-import com.knits.enterprise.model.security.User;
-import org.springframework.stereotype.Service;
 
-/**
- * Service for managing {@link User}.
- */
-@Service
-public class UserService {
-    public UserDto getHardCodedCurrentUserDto() {
+public class UserUtil {
+    public static UserDto getFakeAuthenticatedUserDto(){
         return UserDto.builder()
                 .id(1L)
                 .firstName("mock-admin")

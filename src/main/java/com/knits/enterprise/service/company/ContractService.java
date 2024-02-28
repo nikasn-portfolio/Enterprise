@@ -19,7 +19,7 @@ public class ContractService {
     public List<Long> findContractsIds() {
         return contractRepository.findAllIds();
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public byte[] makeContractsZipFileByIds(List<Long> ids) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);

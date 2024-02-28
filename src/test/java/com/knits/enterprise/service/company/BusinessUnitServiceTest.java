@@ -11,7 +11,6 @@ import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.BusinessUnitMock;
 import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
-import com.knits.enterprise.service.security.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,9 +37,6 @@ public class BusinessUnitServiceTest {
 
     @Mock
     private BusinessUnitRepository businessUnitRepository;
-
-    @Mock
-    private UserService userService;
 
     @Captor
     private ArgumentCaptor<BusinessUnit> businessUnitArgumentCaptor;

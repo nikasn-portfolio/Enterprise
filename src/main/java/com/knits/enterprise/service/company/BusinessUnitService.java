@@ -8,7 +8,7 @@ import com.knits.enterprise.mapper.company.BusinessUnitMapper;
 import com.knits.enterprise.mapper.security.UserMapper;
 import com.knits.enterprise.model.company.BusinessUnit;
 import com.knits.enterprise.repository.company.BusinessUnitRepository;
-import com.knits.enterprise.service.security.UserService;
+import com.knits.enterprise.util.excel.company.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,29 +21,28 @@ import java.util.List;
 @Service
 @Slf4j
 @AllArgsConstructor
-@Transactional
 public class BusinessUnitService {
     private final BusinessUnitRepository businessUnitRepository;
 
     private final BusinessUnitMapper businessUnitMapper;
     private final UserMapper userMapper;
-
-    private final UserService userService;
-
+    @Transactional
     public BusinessUnitDto saveNewBusinessUnit(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitMapper.toEntity(businessUnitDto);
         businessUnit.setActive(true);
         businessUnit.setStartDate(LocalDateTime.now());
-        businessUnit.setCreatedBy(userMapper.toEntity(userService.getHardCodedCurrentUserDto()));
+        businessUnit.setCreatedBy(userMapper.toEntity(UserUtil.getFakeAuthenticatedUserDto()));
         BusinessUnit savedBusinessUnit = businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(savedBusinessUnit);
     }
+    @Transactional
     public BusinessUnitDto partialUpdate(BusinessUnitDto businessUnitDto) {
         BusinessUnit businessUnit = businessUnitRepository.findById(businessUnitDto.getId()).orElseThrow(() -> new UserException("BusinessUnit#" + businessUnitDto.getId() + " not found"));
         businessUnitMapper.partialUpdate(businessUnit, businessUnitDto);
         businessUnitRepository.save(businessUnit);
         return businessUnitMapper.toDto(businessUnit);
     }
+    @Transactional
     public BusinessUnitDto deactivateBusinessUnit(Long id) {
         BusinessUnit businessUnit = businessUnitRepository.findById(id).get();
         businessUnitRepository.delete(businessUnit);
@@ -54,6 +53,7 @@ public class BusinessUnitService {
         BusinessUnit businessUnit = businessUnitRepository.findById(id).orElseThrow(() -> new UserException("BusinessUnit#" + id + " not found"));
         return businessUnitMapper.toDto(businessUnit);
     }
+    @Transactional
     public void deleteBusinessUnit(Long id) {
         List<BusinessUnit> allBusinessUnits = businessUnitRepository.findAllBusinessUnits();
         BusinessUnit businessUnit = allBusinessUnits.stream()

@@ -19,14 +19,13 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-@Transactional(readOnly = true)
 public class GroupService {
     private final GroupRepository groupRepository;
 
     private final EmployeeRepository employeeRepository;
 
     private final GroupMapper groupMapper;
-
+    @Transactional
     public ReportResponse<GroupDto> addEmployeeToGroup(Long groupId, Set<Long> employeeIds){
         Group foundedGroup = groupRepository
                 .findByIdWithEmployees(groupId).orElseThrow(() -> new UserException("Group not found with id: " + groupId));
