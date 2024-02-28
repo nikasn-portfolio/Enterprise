@@ -26,7 +26,6 @@ public class User {
     private Long id;
 
     @Column(length = 50, unique = true, nullable = false)
-    @Pattern(regexp = LOGIN_REGEX, message = LOGIN_ERROR_MESSAGE)
     private String login;
 
     @Column(name = "password_hash", length = 60, nullable = false)

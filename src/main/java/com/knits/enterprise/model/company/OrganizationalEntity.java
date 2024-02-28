@@ -9,11 +9,20 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 @MappedSuperclass
 @Data
 @NoArgsConstructor
 @SuperBuilder(toBuilder=true)
-public abstract class OrganizationalEntity extends AbstractActiveEntity{
+public abstract class OrganizationalEntity{
+    @Id
+    @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
+
+    @Column(name = "active", columnDefinition = "boolean default true")
+    private boolean active;
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
