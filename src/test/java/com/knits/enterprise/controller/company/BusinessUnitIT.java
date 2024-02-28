@@ -68,7 +68,7 @@ public class BusinessUnitIT{
 
     private BusinessUnitDto createFlow(String token, String name) throws Exception{
 
-        BusinessUnitDto expected = BusinessUnitDtoMock.shallowBusinessUnitDto(TestConsts.NO_COUNTER);
+        BusinessUnitDto expected = BusinessUnitDtoMock.createTestBusinessUnitDtoMock(TestConsts.NO_COUNTER);
         expected.setName(name);
         cleanUpByName(token,expected.getName());
         return businessUnitTemplate.create(token,expected);

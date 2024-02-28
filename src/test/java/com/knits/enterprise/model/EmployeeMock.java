@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class EmployeeMock {
-    public static Employee mockEmployee(long id) {
+    public static Employee createTestEmployeeMock(long id) {
         return Employee.builder()
                 .id(id)
                 .firstName("Mock name")
@@ -19,10 +19,10 @@ public class EmployeeMock {
                 .companyMobileNumber("Mock mobile")
                 .build();
     }
-    public static Set<Employee> mockSetOfEmployees(int size) {
+    public static Set<Employee> createTestSetOfEmployeeMock(int size) {
         Set<Employee> employees = new HashSet<>();
         for (int i = 1; i <= size; i++) {
-            Employee employee = mockEmployee(Long.valueOf(i));
+            Employee employee = createTestEmployeeMock(Long.valueOf(i));
             employee.setEmail("mock" + i + "@mock.com");
             employees.add(employee);
         }

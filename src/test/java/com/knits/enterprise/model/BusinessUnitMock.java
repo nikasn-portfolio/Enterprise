@@ -1,7 +1,6 @@
 package com.knits.enterprise.model;
 
 import com.knits.enterprise.dto.search.BusinessUnitSearchDto;
-import com.knits.enterprise.dto.search.GenericSearchDto;
 import com.knits.enterprise.model.company.BusinessUnit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessUnitMock {
-    public static BusinessUnit shallowBusinessUnit(Long id){
+    public static BusinessUnit createTestBusinessUnitMock(Long id){
 
         return BusinessUnit.builder()
                 .id(id)
@@ -30,10 +29,10 @@ public class BusinessUnitMock {
         return new BusinessUnitSearchDto().toBuilder().limit(limit).build();
     }
 
-    public static Page<BusinessUnit> shallowPageOfBusinessUnits(int size) {
+    public static Page<BusinessUnit> createTestSetOfBusinessUnitMock(int size) {
         List<BusinessUnit> businessUnitList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            businessUnitList.add(shallowBusinessUnit(Long.valueOf(i)));
+            businessUnitList.add(createTestBusinessUnitMock(Long.valueOf(i)));
         }
 
         // Create a PageRequest to specify the page number and size

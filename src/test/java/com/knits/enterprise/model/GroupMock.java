@@ -5,7 +5,7 @@ import com.knits.enterprise.model.company.Group;
 import java.util.HashSet;
 
 public class GroupMock {
-    public static Group mockGroup(long id){
+    public static Group createTestGroupMock(long id){
         return Group.builder()
                 .id(id)
                 .name("Group Mock")

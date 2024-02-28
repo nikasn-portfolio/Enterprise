@@ -50,7 +50,7 @@ public class BusinessUnitServiceTest {
     @Test
     @DisplayName("Save business unit successful")
     public void saveNewBusinessUnit(){
-        BusinessUnitDto toSaveDto = businessUnitMapper.toDto(BusinessUnitMock.shallowBusinessUnit(1L));
+        BusinessUnitDto toSaveDto = businessUnitMapper.toDto(BusinessUnitMock.createTestBusinessUnitMock(1L));
 
         when(businessUnitRepository.save(Mockito.any(BusinessUnit.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -82,7 +82,7 @@ public class BusinessUnitServiceTest {
         Long entityIdToUpdate = 1L;
         String updateOnBusinessUnitName = "Train to heaven";
 
-        BusinessUnit foundEntity = BusinessUnitMock.shallowBusinessUnit(entityIdToUpdate);
+        BusinessUnit foundEntity = BusinessUnitMock.createTestBusinessUnitMock(entityIdToUpdate);
 
         BusinessUnitDto toUpdateDto = businessUnitMapper.toDto(foundEntity);
 
@@ -108,7 +108,7 @@ public class BusinessUnitServiceTest {
     @DisplayName("deactivation success")
     void deleteSuccess (){
         Long entityIdToDelete = 1L;
-        BusinessUnit entityToDelete = BusinessUnitMock.shallowBusinessUnit(entityIdToDelete);
+        BusinessUnit entityToDelete = BusinessUnitMock.createTestBusinessUnitMock(entityIdToDelete);
         when(businessUnitRepository.findById(entityIdToDelete)).thenReturn(Optional.of(entityToDelete));
         businessUnitService.deactivateBusinessUnit(entityIdToDelete);
         verify(businessUnitRepository, times(1)).findById(entityIdToDelete);
@@ -122,7 +122,7 @@ public class BusinessUnitServiceTest {
     @DisplayName("findAll / pagination success")
     void findAllSuccess (){
         int expectedSize=10;
-        Page<BusinessUnit> resultSet = BusinessUnitMock.shallowPageOfBusinessUnits(expectedSize);
+        Page<BusinessUnit> resultSet = BusinessUnitMock.createTestSetOfBusinessUnitMock(expectedSize);
         BusinessUnitSearchDto businessUnitSearchDto = BusinessUnitMock.createBusinessUnitSearchDto(expectedSize);
         when(businessUnitRepository.findAll((Specification<BusinessUnit>) any(), (Pageable) any())).thenReturn(resultSet);
 
@@ -135,7 +135,7 @@ public class BusinessUnitServiceTest {
     @DisplayName("delete success")
     void deleteByIdSuccess (){
         Long entityId = 1L;
-        BusinessUnit savedEntity = BusinessUnitMock.shallowBusinessUnit(entityId);
+        BusinessUnit savedEntity = BusinessUnitMock.createTestBusinessUnitMock(entityId);
         when(businessUnitRepository.findAllBusinessUnits()).thenReturn(Collections.singletonList(savedEntity));
         businessUnitService.deleteBusinessUnit(entityId);
         verify(businessUnitRepository,times(1)).deleteBusinessUnitById(entityId);
@@ -145,7 +145,7 @@ public class BusinessUnitServiceTest {
     @DisplayName("findById success")
     void findByIdSuccess(){
         Long entityId = 1L;
-        BusinessUnit savedEntity = BusinessUnitMock.shallowBusinessUnit(entityId);
+        BusinessUnit savedEntity = BusinessUnitMock.createTestBusinessUnitMock(entityId);
         when(businessUnitRepository.findById(entityId)).thenReturn(Optional.of(savedEntity));
         businessUnitService.findBusinessUnitById(entityId);
         verify(businessUnitRepository,times(1)).findById(entityId);
