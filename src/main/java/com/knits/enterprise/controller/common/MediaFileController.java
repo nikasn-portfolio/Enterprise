@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MediaFileController {
     private final MediaFileService mediaFileService;
 
-    @PostMapping(value = "/media-file-service/media-files/test-file", produces = {"application/json"})
+    @PostMapping(value = "/media-file-service/media-files/test-file", produces = "application/json")
     public ResponseEntity saveTestPdfFile() {
         mediaFileService.saveTestPdfFile();
         return ResponseEntity.status(HttpStatus.CREATED).build();

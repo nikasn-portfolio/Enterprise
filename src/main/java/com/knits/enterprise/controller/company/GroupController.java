@@ -13,11 +13,11 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/group-service/groups")
+@RequestMapping("/api")
 @Slf4j
 public class GroupController {
     private final GroupService groupService;
-    @PatchMapping(value = "/{id}/employees", produces = {"application/json"})
+    @PatchMapping(value = "/group-service/group/{id}/employee", produces = "application/json")
     public ResponseEntity<ReportResponse<GroupDto>> addEmployeesToGroup(@PathVariable Long id, @RequestParam Set<Long> employeeIds) {
         log.debug("REST request to add list of Employees to Group :{}", id);
         return ResponseEntity.ok().body(groupService.addEmployeeToGroup(id, employeeIds));

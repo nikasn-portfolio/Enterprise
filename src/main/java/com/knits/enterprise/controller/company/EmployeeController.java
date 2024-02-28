@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/employee-service/employees")
+@RequestMapping("/api")
 @Slf4j
 public class EmployeeController {
 
@@ -33,7 +33,7 @@ public class EmployeeController {
 
     private final ContractService contractService;
 
-    @PostMapping(produces = {"application/json"}, consumes = {"application/json"})
+    @PostMapping(value = "/employee-service/employee", produces = "application/json", consumes = "application/json")
     public ResponseEntity<EmployeeDto> createNewEmployee(@RequestBody EmployeeDto employeeDto) {
         log.debug("REST request to create Employee");
         return ResponseEntity
@@ -41,7 +41,7 @@ public class EmployeeController {
                 .body(employeeService.saveNewEmployee(employeeDto));
     }
 
-    @GetMapping(value = "/{id}", produces = {"application/json"})
+    @GetMapping(value = "/employee-service/employee/{id}", produces = "application/json")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable(value = "id") final Long id) {
         log.debug("REST request to get Employee : {}", id);
         EmployeeDto employeeFound = employeeService.findEmployeeById(id);
@@ -51,7 +51,7 @@ public class EmployeeController {
 
     }
 
-    @PatchMapping(produces = {"application/json"}, consumes = {"application/json"})
+    @PatchMapping(value = "/employee-service/employee", produces = "application/json", consumes = "application/json")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable(value = "id") @RequestBody EmployeeDto employeeDto) {
         EmployeeDto employeeFound = employeeService.partialUpdate(employeeDto);
         return ResponseEntity
@@ -59,7 +59,7 @@ public class EmployeeController {
                 .body(employeeFound);
     }
 
-    @PutMapping(produces = {"application/json"})
+    @PutMapping(value= "/employee-service/employee", produces = "application/json")
     public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable(value = "id") final Long id) {
         log.debug("REST request to delete Employee : {}", id);
         EmployeeDto employeeFound = employeeService.deleteEmployee(id);
@@ -68,7 +68,7 @@ public class EmployeeController {
                 .body(employeeFound);
     }
 
-    @GetMapping(produces = {"application/json"})
+    @GetMapping(value="/employee-service/employee", produces = "application/json")
     public ResponseEntity<PageImpl<EmployeeDto>> searchForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
@@ -79,7 +79,7 @@ public class EmployeeController {
                 .body(foundedEmployeeDtos);
     }
 
-    @GetMapping(value = "/excel", produces = APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/employee-service/employee/excel", produces = APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> downloadExcelReportForEmployees(@RequestBody(required = false) EmployeeSearchDto searchDto){
         if(searchDto == null){
             searchDto = new EmployeeSearchDto();
@@ -91,7 +91,7 @@ public class EmployeeController {
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    @PostMapping(value = "/excel")
+    @PostMapping(value = "/employee-service/employee/excel")
     public ResponseEntity<Void> createEmployeesFromExcelFile(@RequestParam(value = "fileName") String fileName){
         if(fileName == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -100,17 +100,17 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/analysis", produces = {"application/json"})
+    @GetMapping(value = "/employee-service/employee/analysis", produces = "application/json")
     public ResponseEntity<EmployeeAnalyticsDto> getEmployeesAnalysis(){
         EmployeeAnalyticsDto employeeAnalyticsDto = employeeService.employeeAnalytics();
         return ResponseEntity.ok().body(employeeAnalyticsDto);
     }
 
-    @GetMapping(value = "/contracts/ids", produces = {"application/json"})
+    @GetMapping(value = "/employee-service/employee/contract/id", produces = "application/json")
     public ResponseEntity<List<Long>> findAllContractsIds() {
         return ResponseEntity.ok(contractService.findContractsIds());
     }
-    @GetMapping("/contracts/zip")
+    @GetMapping("/employee-service/employee/contract/zip")
     public ResponseEntity<Resource> getEmployeeContracts(@RequestParam List<Long> ids) {
         byte[] bytes = contractService.makeContractsZipFileByIds(ids);
         HttpHeaders headers = new HttpHeaders();

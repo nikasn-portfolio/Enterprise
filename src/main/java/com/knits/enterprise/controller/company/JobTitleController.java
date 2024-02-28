@@ -16,7 +16,7 @@ public class JobTitleController {
     private JobTitleService jobTitleService;
 
 
-    @PostMapping(value = "/jobtitles", produces = {"application/json"}, consumes = {"application/json"})
+    @PostMapping(value = "/job-title-service/job-title", produces = "application/json", consumes = "application/json")
     public ResponseEntity<JobTitleDto> createNewJobTitle(@RequestBody JobTitleDto jobTitleDto) {
         log.debug("REST request to create JobTitle");
         return ResponseEntity
@@ -24,7 +24,7 @@ public class JobTitleController {
                 .body(jobTitleService.saveNewJobTitle(jobTitleDto));
     }
 
-    @PatchMapping(value = "/jobtitles/deactivate")
+    @PatchMapping(value = "/job-title-service/job-title")
     public ResponseEntity<JobTitleDto> deactivateJobTitle(@RequestParam final Long id) {
         log.debug("REST request to deactivate JobTitle : {}", id);
         JobTitleDto deactivateJobTitle = jobTitleService.deactivateJobTitle(id);
