@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-1">
         <createTable tableName="business_unit">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="business_unit_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -19,7 +19,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-2">
         <createTable tableName="contact">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="contact_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -40,7 +40,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-3">
         <createTable tableName="cost_center">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="cost_center_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -57,7 +57,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-4">
         <createTable tableName="department">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="department_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -74,7 +74,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-5">
         <createTable tableName="division">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="division_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -91,7 +91,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-6">
         <createTable tableName="employee">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -131,7 +131,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-7">
         <createTable tableName="group">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="group_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -148,7 +148,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-8">
         <createTable tableName="job_title">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="job_title_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -165,7 +165,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-9">
         <createTable tableName="location">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="location_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -188,7 +188,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-10">
         <createTable tableName="organization">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="organization_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -215,7 +215,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-11">
         <createTable tableName="team">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="team_pkey"/>
             </column>
             <column defaultValueBoolean="true" name="active" type="BOOLEAN"/>
@@ -232,7 +232,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-12">
         <createTable tableName="user">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user_pkey"/>
             </column>
             <column name="active" type="BOOLEAN">
@@ -258,12 +258,9 @@
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-15">
         <addUniqueConstraint columnNames="email" constraintName="uk_ob8kqyqqgmefl0aco34akdtpe" tableName="user"/>
     </changeSet>
-    <changeSet author="stefano.fiorenza (generated)" id="1677882888442-16">
-        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="sequence_generator" startValue="4050"/>
-    </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-17">
         <createTable tableName="address">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="address_pkey"/>
             </column>
             <column name="city" type="VARCHAR(255)">
@@ -283,7 +280,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-18">
         <createTable tableName="contract">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="contract_pkey"/>
             </column>
             <column name="active" type="BOOLEAN"/>
@@ -295,7 +292,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-19">
         <createTable tableName="country">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="country_pkey"/>
             </column>
             <column name="iso" type="VARCHAR(255)"/>
@@ -316,7 +313,7 @@
     </changeSet>
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-21">
         <createTable tableName="files">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="files_pkey"/>
             </column>
             <column name="bytes" type="OID"/>
@@ -324,10 +321,10 @@
             <column name="size" type="BIGINT"/>
             <column name="title" type="VARCHAR(255)"/>
         </createTable>
-    </changeSet>
+    </changeSet
     <changeSet author="stefano.fiorenza (generated)" id="1677882888442-22">
         <createTable tableName="role">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="role_pkey"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>

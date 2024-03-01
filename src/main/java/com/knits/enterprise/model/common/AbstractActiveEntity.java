@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @MappedSuperclass
@@ -16,8 +17,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AbstractActiveEntity{
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(name = "active", columnDefinition = "boolean default true")

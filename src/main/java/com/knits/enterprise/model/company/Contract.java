@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -20,8 +21,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "contract")
 public class Contract{
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.REFRESH)
