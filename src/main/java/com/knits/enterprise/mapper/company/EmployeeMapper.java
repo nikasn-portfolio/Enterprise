@@ -47,6 +47,20 @@ public interface EmployeeMapper extends EntityMapper<Employee, EmployeeDto> {
     @Mapping(target = "department", ignore = true)
     @Mapping(target = "division", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void partialUpdate(@MappingTarget Employee employee, EmployeeDto dto);
+
+    @Override
+    @Mapping(source = "birthDate", target = "birthDate", dateFormat = Constants.DATE_FORMAT_DD_MM_YYYY)
+    @Mapping(source = "startDate", target = "startDate", dateFormat = Constants.DATE_FORMAT_DD_MM_YYYY)
+    @Mapping(source = "endDate", target = "endDate", dateFormat = Constants.DATE_FORMAT_DD_MM_YYYY)
+    @Mapping(target = "solidLineManager", ignore = true)
+    @Mapping(target = "businessUnit", ignore = true)
+    @Mapping(target = "organization", ignore = true)
+    @Mapping(target = "office", ignore = true)
+    @Mapping(target = "jobTitle", ignore = true)
+    @Mapping(target = "department", ignore = true)
+    @Mapping(target = "division", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Employee toEntity(EmployeeDto dto);
 
     @Mapping(source = "birthDate", target = "birthDate", dateFormat = Constants.DATE_FORMAT_DD_MM_YYYY)

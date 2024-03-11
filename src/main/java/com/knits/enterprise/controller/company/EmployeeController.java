@@ -42,7 +42,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/employee-service/employee/{id}", produces = "application/json")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable(value = "id") final Long id) {
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable(value = "id") Long id) {
         log.debug("REST request to get Employee : {}", id);
         EmployeeDto employeeFound = employeeService.findEmployeeById(id);
         return ResponseEntity
@@ -52,20 +52,20 @@ public class EmployeeController {
     }
 
     @PatchMapping(value = "/employee-service/employee", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable(value = "id") @RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto employeeDto) {
         EmployeeDto employeeFound = employeeService.partialUpdate(employeeDto);
         return ResponseEntity
                 .ok()
                 .body(employeeFound);
     }
 
-    @PutMapping(value= "/employee-service/employee", produces = "application/json")
-    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable(value = "id") final Long id) {
+    @PutMapping(value= "/employee-service/employee/{id}", produces = "application/json")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "id") final Long id) {
         log.debug("REST request to delete Employee : {}", id);
         EmployeeDto employeeFound = employeeService.deleteEmployee(id);
         return ResponseEntity
-                .ok()
-                .body(employeeFound);
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @GetMapping(value="/employee-service/employee", produces = "application/json")

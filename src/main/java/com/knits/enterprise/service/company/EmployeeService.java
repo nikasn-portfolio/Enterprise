@@ -62,7 +62,6 @@ public class EmployeeService {
     @Transactional
     public EmployeeDto partialUpdate(EmployeeDto employeeDto) {
         Employee employee = employeeRepository.findById(employeeDto.getId()).orElseThrow(() -> new UserException("User#" + employeeDto.getId() + " not found"));
-
         employeeMapper.partialUpdate(employee, employeeDto);
         employeeRepository.save(employee);
         return employeeMapper.toDto(employee);

@@ -17,53 +17,45 @@ import javax.validation.constraints.NotNull;
 public class EmployeeDto extends AbstractActiveDto {
 
     private Long id;
-    @NotNull()
+    @NotNull
     private String firstName;
-    @NotNull()
+    @NotNull
     private String lastName;
-
+    @NotNull
     private String email;
 
-    @NotNull()
+    @NotNull
     private String birthDate;
 
-    @NotNull()
+    @NotNull
     private Gender gender;
 
-    @NotNull()
+    @NotNull
     private String startDate;
 
-    @NotNull()
+
     private String endDate;
 
-    @NotNull()
+    @NotNull
     private String companyPhone;
 
-    @NotNull()
+    @NotNull
     private String companyMobileNumber;
 
-    @NotNull()
     private String role;
 
-    @NotNull()
     private BusinessUnitDto businessUnit;
 
-    @NotNull()
     private OrganizationDto organization;
 
-    @NotNull()
     private OfficeDto office;
 
-    @NotNull()
     private JobTitleDto jobTitle;
 
-    @NotNull()
     private DepartmentDto department;
 
-    @NotNull()
     private DivisionDto division;
 
-    @NotNull()
     private EmployeeDto solidLineManager;
 }
 

@@ -1,6 +1,7 @@
 package com.knits.enterprise.dto.search;
 
 import com.knits.enterprise.model.company.Employee;
+import com.knits.enterprise.model.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +28,7 @@ public class EmployeeSearchDto extends GenericSearchDto<Employee>{
 
     private String firstName;
     private String lastName;
-    private String gender;
+    private Gender gender;
 
     private String hireDateFrom;
 
@@ -50,7 +51,7 @@ public class EmployeeSearchDto extends GenericSearchDto<Employee>{
             filters.add(lastNameAsPredicate);
         }
 
-        if (StringUtils.isNotEmpty(gender)){
+        if (StringUtils.isNotEmpty(gender.toString())){
             Predicate genderAsPredicate = criteriaBuilder.equal(root.get("gender"), gender);
             filters.add(genderAsPredicate);
         }
